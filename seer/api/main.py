@@ -10,6 +10,7 @@ from typing import List
 
 from ..db.database import get_db
 from ..utils.config import settings
+from .routers import crawlers, threats
 
 # Create FastAPI app
 app = FastAPI(
@@ -44,16 +45,18 @@ def health_check():
     return {"status": "healthy"}
 
 
-# Import and include routers
-# These would be implemented in separate files in a real application
-# from .routers import crawlers, alerts, users, etc.
+# Include routers
+app.include_router(
+    crawlers.router,
+    prefix="/api/v1",
+    tags=["crawlers"]
+)
 
-# Example router inclusion:
-# app.include_router(
-#     crawlers.router,
-#     prefix="/api/v1/crawlers",
-#     tags=["crawlers"]
-# )
+app.include_router(
+    threats.router,
+    prefix="/api/v1",
+    tags=["threats"]
+)
 
 
 def start():
