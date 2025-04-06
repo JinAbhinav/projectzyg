@@ -106,4 +106,4 @@ http://localhost:8000/docs
 
 ## License
 
-[MIT License](LICENSE) 
+[MIT License](LICENSE)
