@@ -6,11 +6,15 @@ from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, status
 from sqlalchemy.orm import Session
 from typing import List, Dict, Any, Optional
 import logging
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, HttpUrl, Field
+import asyncio
+import os
+from pathlib import Path
 
 from ...db.database import get_db
 from ...db.models import CrawlJob, CrawlResult
-from ...crawler.crawler import crawler
+from ...crawler.crawler import crawl_url, crawl_multiple_urls
+from ...utils.config import settings
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -25,7 +29,16 @@ class CrawlRequest(BaseModel):
     """Model for crawl request."""
     url: HttpUrl
     keywords: Optional[List[str]] = None
-    recursion_depth: Optional[int] = None
+    max_depth: Optional[int] = Field(default=2, ge=1, le=5, description="Maximum crawl depth (1-5)")
+    max_pages: Optional[int] = Field(default=10, ge=1, le=50, description="Maximum pages to crawl (1-50)")
+
+
+class MultiCrawlRequest(BaseModel):
+    """Model for multiple URL crawl request."""
+    urls: List[HttpUrl]
+    keywords: Optional[List[str]] = None
+    max_depth: Optional[int] = Field(default=1, ge=1, le=3, description="Maximum crawl depth (1-3)")
+    max_pages_per_site: Optional[int] = Field(default=5, ge=1, le=20, description="Maximum pages per site (1-20)")
 
 
 class CrawlResponse(BaseModel):
@@ -43,6 +56,7 @@ class CrawlResultResponse(BaseModel):
     content: Optional[str] = None
     content_type: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None
+    results_dir: Optional[str] = None
 
 
 @router.post("/crawl", response_model=CrawlResponse, status_code=status.HTTP_202_ACCEPTED)
@@ -51,11 +65,16 @@ async def start_crawl(
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db)
 ):
-    """Start a new crawl job."""
+    """Start a new crawl job for a single URL."""
     # Create a new crawl job
     job = CrawlJob(
         url=str(crawl_request.url),
-        status="pending"
+        status="pending",
+        parameters={
+            "keywords": crawl_request.keywords,
+            "max_depth": crawl_request.max_depth,
+            "max_pages": crawl_request.max_pages
+        }
     )
     
     db.add(job)
@@ -68,7 +87,50 @@ async def start_crawl(
         job_id=job.id,
         url=str(crawl_request.url),
         keywords=crawl_request.keywords,
-        recursion_depth=crawl_request.recursion_depth
+        max_depth=crawl_request.max_depth,
+        max_pages=crawl_request.max_pages
+    )
+    
+    return CrawlResponse(
+        job_id=job.id,
+        status=job.status,
+        url=job.url
+    )
+
+
+@router.post("/crawl/multiple", response_model=CrawlResponse, status_code=status.HTTP_202_ACCEPTED)
+async def start_multiple_crawl(
+    crawl_request: MultiCrawlRequest,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db)
+):
+    """Start a new crawl job for multiple URLs."""
+    # Create a new crawl job (using the first URL as identifier)
+    first_url = str(crawl_request.urls[0]) if crawl_request.urls else "multiple_urls"
+    
+    job = CrawlJob(
+        url=f"{first_url} and {len(crawl_request.urls)-1} other sites",
+        status="pending",
+        parameters={
+            "urls": [str(url) for url in crawl_request.urls],
+            "keywords": crawl_request.keywords,
+            "max_depth": crawl_request.max_depth,
+            "max_pages_per_site": crawl_request.max_pages_per_site
+        }
+    )
+    
+    db.add(job)
+    db.commit()
+    db.refresh(job)
+    
+    # Add the crawl task to background tasks
+    background_tasks.add_task(
+        process_multiple_crawl_job,
+        job_id=job.id,
+        urls=[str(url) for url in crawl_request.urls],
+        keywords=crawl_request.keywords,
+        max_depth=crawl_request.max_depth,
+        max_pages_per_site=crawl_request.max_pages_per_site
     )
     
     return CrawlResponse(
@@ -122,64 +184,23 @@ async def get_crawl_results(job_id: int, db: Session = Depends(get_db)):
             title=result.title,
             content=result.content,
             content_type=result.content_type,
-            metadata=result.metadata
+            metadata=result.metadata,
+            results_dir=result.metadata.get("results_dir") if result.metadata else None
         )
         for result in results
     ]
 
 
-# Mock data for demo
-MOCK_SITES = [
-    {
-        "url": "https://darkforum.example.com/threats",
-        "title": "New Zero-Day Exploit Discussion",
-        "content": "I've discovered a new zero-day vulnerability in Windows Server 2022 that allows remote code execution. Looking for buyers.",
-        "content_type": "text/html"
-    },
-    {
-        "url": "https://hackermarket.onion.example/listings",
-        "title": "Ransomware as a Service - New Payment Models",
-        "content": "Our ransomware service now offers a 70/30 split with affiliates. Target finance, healthcare, and education sectors for maximum returns.",
-        "content_type": "text/html"
-    },
-    {
-        "url": "https://leaksite.example.net/dumps",
-        "title": "Corporate Database Dump - Fortune 500 Company",
-        "content": "Complete dump of employee records and customer data from a major Fortune 500 tech company. Includes emails, hashed passwords, and personal information.",
-        "content_type": "text/plain"
-    },
-    {
-        "url": "https://telegram.example.org/channel/cyberthreats",
-        "title": "DDoS Attack Coordination",
-        "content": "Planning coordinated DDoS attacks against government websites. Target list and timing details enclosed.",
-        "content_type": "text/html"
-    },
-    {
-        "url": "https://pasteboard.example.io/paste123",
-        "title": "Stolen API Keys",
-        "content": "Collection of stolen AWS, Azure, and GCP API keys and access tokens from misconfigured repositories.",
-        "content_type": "text/plain"
-    }
-]
-
-
-async def process_crawl_job(job_id: int, url: str, keywords: Optional[List[str]] = None, recursion_depth: Optional[int] = None):
-    """Process a crawl job in the background."""
+async def process_crawl_job(job_id: int, url: str, keywords: Optional[List[str]] = None, max_depth: Optional[int] = 2, max_pages: Optional[int] = 10):
+    """Process a crawl job in the background using Crawl4AI."""
     logger.info(f"Starting crawl job {job_id} for URL: {url}")
     
-    # This would normally use the database session, but for simplicity,
-    # we're using a direct database connection
+    # Create a database session
     from sqlalchemy import create_engine
     from sqlalchemy.orm import sessionmaker
     from ...utils.config import settings
     from datetime import datetime
-    import random
-    import time
     
-    # Simulate crawling delay
-    time.sleep(5)
-    
-    # Create a database session
     engine = create_engine(settings.database.DB_URL)
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     db = SessionLocal()
@@ -190,42 +211,132 @@ async def process_crawl_job(job_id: int, url: str, keywords: Optional[List[str]]
         job.status = "in_progress"
         db.commit()
         
-        # Simulate crawling
-        logger.info(f"Crawling URL: {url}")
+        # Run the actual crawl
+        logger.info(f"Crawling URL: {url} with depth={max_depth}, max_pages={max_pages}")
         
-        # In a real implementation, this would call crawler.crawl_onion_site or similar
-        # For the demo, we'll use mock data
+        # Execute the crawl
+        crawl_result = crawl_url(
+            url=url,
+            keywords=keywords,
+            max_depth=max_depth,
+            max_pages=max_pages
+        )
         
-        # Select a random number of mock sites to use as results
-        selected_sites = random.sample(MOCK_SITES, random.randint(2, len(MOCK_SITES)))
+        # Process results
+        if crawl_result["status"] == "success":
+            # Store results for each crawled page
+            for page_result in crawl_result.get("results", []):
+                # Create a new result entry
+                result = CrawlResult(
+                    job_id=job_id,
+                    url=page_result["url"],
+                    title=page_result.get("title", "Untitled Page"),
+                    content=page_result.get("content", ""),
+                    content_type=page_result.get("content_type", "text/markdown"),
+                    metadata={
+                        "crawled_at": page_result.get("metadata", {}).get("crawled_at", datetime.now().isoformat()),
+                        "links": page_result.get("metadata", {}).get("links", []),
+                        "depth": page_result.get("metadata", {}).get("depth", 0),
+                        "results_dir": crawl_result.get("results_dir")
+                    }
+                )
+                db.add(result)
+            
+            # Update job status
+            job.status = "completed"
+            job.completed_at = datetime.now()
+            job.result_count = len(crawl_result.get("results", []))
+            
+        else:
+            # Handle error
+            logger.error(f"Crawl job {job_id} failed: {crawl_result.get('message', 'Unknown error')}")
+            job.status = "failed"
+            job.error = crawl_result.get("message", "Unknown error")
         
-        # Create crawl results
-        for site in selected_sites:
-            result = CrawlResult(
-                job_id=job_id,
-                url=site["url"],
-                title=site["title"],
-                content=site["content"],
-                content_type=site["content_type"],
-                metadata={"keywords": keywords or [], "found_via": url}
-            )
-            db.add(result)
-        
-        # Update job status to completed
-        job.status = "completed"
-        job.completed_at = datetime.utcnow()
         db.commit()
-        
-        logger.info(f"Crawl job {job_id} completed successfully")
+        logger.info(f"Completed crawl job {job_id} with status: {job.status}")
         
     except Exception as e:
-        # Update job status to failed
+        logger.error(f"Error processing crawl job {job_id}: {str(e)}")
         job = db.query(CrawlJob).filter(CrawlJob.id == job_id).first()
-        job.status = "failed"
+        if job:
+            job.status = "failed"
+            job.error = str(e)
+            db.commit()
+    finally:
+        db.close()
+
+
+async def process_multiple_crawl_job(job_id: int, urls: List[str], keywords: Optional[List[str]] = None, max_depth: Optional[int] = 1, max_pages_per_site: Optional[int] = 5):
+    """Process a multi-site crawl job in the background."""
+    logger.info(f"Starting multi-site crawl job {job_id} for {len(urls)} URLs")
+    
+    # Create a database session
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+    from ...utils.config import settings
+    from datetime import datetime
+    
+    engine = create_engine(settings.database.DB_URL)
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    db = SessionLocal()
+    
+    try:
+        # Update job status to in_progress
+        job = db.query(CrawlJob).filter(CrawlJob.id == job_id).first()
+        job.status = "in_progress"
         db.commit()
         
-        logger.error(f"Crawl job {job_id} failed: {str(e)}")
-    
+        # Execute the multi-site crawl
+        crawl_result = crawl_multiple_urls(
+            urls=urls,
+            keywords=keywords,
+            max_depth=max_depth,
+            max_pages=max_pages_per_site
+        )
+        
+        total_pages = 0
+        total_successful_sites = crawl_result.get("successful_sites", 0)
+        
+        # Process results for each site
+        for site_result in crawl_result.get("crawl_results", []):
+            site_url = site_result.get("url", "unknown")
+            
+            # Create a result entry for the site summary
+            result = CrawlResult(
+                job_id=job_id,
+                url=site_url,
+                title=f"Crawl results for {site_url}",
+                content="",  # No content at summary level
+                content_type="application/json",
+                metadata={
+                    "crawled_at": datetime.now().isoformat(),
+                    "pages_crawled": site_result.get("pages_crawled", 0),
+                    "status": site_result.get("status", "unknown"),
+                    "results_dir": site_result.get("results_dir"),
+                    "error_message": site_result.get("error_message")
+                }
+            )
+            db.add(result)
+            total_pages += site_result.get("pages_crawled", 0)
+        
+        # Update job status
+        job.status = "completed" if total_successful_sites > 0 else "failed"
+        job.completed_at = datetime.now()
+        job.result_count = total_pages
+        
+        if total_successful_sites == 0:
+            job.error = "All site crawls failed"
+        
+        db.commit()
+        logger.info(f"Completed multi-site crawl job {job_id} with status: {job.status}")
+        
+    except Exception as e:
+        logger.error(f"Error processing multi-site crawl job {job_id}: {str(e)}")
+        job = db.query(CrawlJob).filter(CrawlJob.id == job_id).first()
+        if job:
+            job.status = "failed"
+            job.error = str(e)
+            db.commit()
     finally:
-        # Close the database session
         db.close() 
