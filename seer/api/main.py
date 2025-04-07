@@ -2,72 +2,74 @@
 Main FastAPI application for SEER API.
 """
 
-import uvicorn
-from fastapi import FastAPI, Depends, HTTPException
+import logging
+import os
+import sys
+from pathlib import Path
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
-from typing import List
 
-from ..db.database import get_db
-from ..utils.config import settings
-from .routers import crawlers, threats
+# Add the project root to sys.path to enable absolute imports
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-# Create FastAPI app
+# Now use absolute imports instead of relative
+from seer.api.routers import crawlers
+from seer.utils.config import settings
+from seer.utils.setup import ensure_directories
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Create app
 app = FastAPI(
-    title="SEER API",
-    description="API for SEER - AI-Powered Cyber Threat Prediction & Early Warning System",
-    version=settings.APP_VERSION
+    title="SEER API", 
+    description="API for SEER (Search Engine Exploitation & Research) system",
+    version="0.1.0"
 )
 
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, this should be restricted
+    allow_origins=["*"],  # TODO: Restrict in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Root endpoint
+# Create required directories
+ensure_directories()
+logger.info("All required directories have been created")
+
+# Add routers
+app.include_router(crawlers.router, prefix="/api/v1")
+
+
 @app.get("/")
-def read_root():
+async def root():
     """Root endpoint."""
-    return {
-        "name": settings.APP_NAME,
-        "version": settings.APP_VERSION,
-        "description": "AI-Powered Cyber Threat Prediction & Early Warning System"
-    }
+    return {"message": "SEER API - Search Engine Exploitation & Research"}
 
-# Health check endpoint
+
 @app.get("/health")
-def health_check():
+async def health():
     """Health check endpoint."""
-    return {"status": "healthy"}
+    return {"status": "ok"}
 
 
-# Include routers
-app.include_router(
-    crawlers.router,
-    prefix="/api/v1",
-    tags=["crawlers"]
-)
-
-app.include_router(
-    threats.router,
-    prefix="/api/v1",
-    tags=["threats"]
-)
-
-
-def start():
-    """Start the API server."""
-    uvicorn.run(
-        "seer.api.main:app",
-        host=settings.api.API_HOST,
-        port=settings.api.API_PORT,
-        reload=settings.api.DEBUG
-    )
-
-
+# Run the application when the script is executed directly
 if __name__ == "__main__":
-    start() 
+    import uvicorn
+    
+    # Add a start function that can be imported by the project root
+    def start():
+        """Start the API server."""
+        uvicorn.run(
+            "seer.api.main:app",
+            host="0.0.0.0",
+            port=8000,
+            reload=True
+        )
+    
+    # When running directly, use __main__ as the import string (not module-based)
+    uvicorn.run(app, host="0.0.0.0", port=8000) 

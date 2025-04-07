@@ -1,0 +1,15 @@
+{
+  "url": "https://www.knosfer.com//page4",
+  "title": "Sample Page 5 from www.knosfer.com",
+  "content": "# Sample Page 5 from www.knosfer.com\n\nThis is mock content for https://www.knosfer.com//page4.\n\n## Sample Section\n\nThis is a sample section with mock content.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  "content_type": "text/markdown",
+  "metadata": {
+    "crawled_at": "2025-04-06T21:24:49.334978",
+    "depth": 2,
+    "links": [
+      "https://www.knosfer.com//link0",
+      "https://www.knosfer.com//link1",
+      "https://www.knosfer.com//link2"
+    ]
+  }
+}

@@ -19,6 +19,7 @@ class CrawlJob(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     completed_at = Column(DateTime, nullable=True)
     crawl_id = Column(String(255), nullable=True)  # External crawler ID
+    parameters = Column(JSON, nullable=True)  # Store crawl parameters as JSON
     
     # Relationship with results
     results = relationship("CrawlResult", back_populates="job", cascade="all, delete")
@@ -36,7 +37,7 @@ class CrawlResult(Base):
     content = Column(Text, nullable=True)
     content_type = Column(String(100), nullable=True)
     crawled_at = Column(DateTime, default=datetime.utcnow)
-    metadata = Column(JSON, nullable=True)
+    page_metadata = Column(JSON, nullable=True)
     
     # Relationships
     job = relationship("CrawlJob", back_populates="results")

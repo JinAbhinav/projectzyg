@@ -1,0 +1,17 @@
+{
+  "url": "https://example.com/",
+  "crawl_time": "2025-04-06T21:24:15.179121",
+  "pages_crawled": 2,
+  "max_depth": 1,
+  "keywords": null,
+  "results": [
+    {
+      "url": "https://example.com/",
+      "title": "Sample Page 1 from example.com"
+    },
+    {
+      "url": "https://example.com//page1",
+      "title": "Sample Page 2 from example.com"
+    }
+  ]
+}

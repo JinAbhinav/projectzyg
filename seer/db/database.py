@@ -1,28 +1,27 @@
 """
-Database connection and session management.
+Database configuration for SEER.
 """
 
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from ..utils.config import settings
 
-# Create SQLAlchemy engine
-engine = create_engine(settings.database.DB_URL)
+# Create SQLite database engine
+SQLALCHEMY_DATABASE_URL = "sqlite:///./seer.db"
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
 
 # Create session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Create base class for models
+# Create base class for declarative models
 Base = declarative_base()
 
-
+# Dependency to get DB session
 def get_db():
-    """Get database session.
-    
-    Yields:
-        Session: Database session
-    """
+    """Get a database session."""
     db = SessionLocal()
     try:
         yield db

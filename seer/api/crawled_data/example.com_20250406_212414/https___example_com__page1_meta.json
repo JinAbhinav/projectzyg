@@ -1,0 +1,16 @@
+{
+  "url": "https://example.com//page1",
+  "title": "Sample Page 2 from example.com",
+  "content": "# Sample Page 2 from example.com\n\nThis is mock content for https://example.com//page1.\n\n## Sample Section\n\nThis is a sample section with mock content.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  "content_type": "text/markdown",
+  "metadata": {
+    "crawled_at": "2025-04-06T21:24:14.857581",
+    "depth": 1,
+    "links": [
+      "https://example.com//link0",
+      "https://example.com//link1",
+      "https://example.com//link2",
+      "https://example.com//link3"
+    ]
+  }
+}

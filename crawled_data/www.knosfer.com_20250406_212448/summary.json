@@ -1,0 +1,29 @@
+{
+  "url": "https://www.knosfer.com/",
+  "crawl_time": "2025-04-06T21:24:49.647224",
+  "pages_crawled": 5,
+  "max_depth": 2,
+  "keywords": null,
+  "results": [
+    {
+      "url": "https://www.knosfer.com/",
+      "title": "Sample Page 1 from www.knosfer.com"
+    },
+    {
+      "url": "https://www.knosfer.com//page1",
+      "title": "Sample Page 2 from www.knosfer.com"
+    },
+    {
+      "url": "https://www.knosfer.com//page2",
+      "title": "Sample Page 3 from www.knosfer.com"
+    },
+    {
+      "url": "https://www.knosfer.com//page3",
+      "title": "Sample Page 4 from www.knosfer.com"
+    },
+    {
+      "url": "https://www.knosfer.com//page4",
+      "title": "Sample Page 5 from www.knosfer.com"
+    }
+  ]
+}

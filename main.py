@@ -4,7 +4,8 @@ Main entry point for SEER application.
 
 import argparse
 import logging
-from seer.api.main import start as start_api
+import os
+import sys
 
 # Set up logging
 logging.basicConfig(
@@ -35,6 +36,18 @@ def main():
         # Default to API server if no command provided
         logger.info("No command specified, starting SEER API server")
         start_api()
+
+
+def start_api():
+    """Start the API server."""
+    import uvicorn
+    logger.info("Starting API server at http://0.0.0.0:8000")
+    uvicorn.run(
+        "seer.api.main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True
+    )
 
 
 if __name__ == "__main__":

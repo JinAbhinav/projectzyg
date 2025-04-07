@@ -1,11 +1,14 @@
+#!/usr/bin/env python3
 """
 Configuration utilities for the SEER system.
 Handles loading environment variables and configuration settings.
 """
 
 import os
+import sys
+from typing import Dict, Any, Optional
 from dotenv import load_dotenv
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 # Load environment variables from .env file
 load_dotenv()
@@ -40,6 +43,10 @@ class CrawlerSettings(BaseSettings):
     CRAWL4AI_BASE_URL: str = os.getenv("CRAWL4AI_BASE_URL", "https://api.crawl4ai.com")
     MAX_RECURSION_DEPTH: int = int(os.getenv("MAX_RECURSION_DEPTH", "3"))
     USER_AGENT: str = os.getenv("USER_AGENT", "SEER-Crawler/0.1.0")
+    PROXY_URL: str = os.getenv("PROXY_URL", "")
+    TOR_PROXY: str = os.getenv("TOR_PROXY", "socks5://127.0.0.1:9050")
+    ALLOW_NON_ONION_IN_DARK_MODE: bool = os.getenv("ALLOW_NON_ONION_IN_DARK_MODE", "False").lower() == "true"
+    OUTPUT_DIR: str = os.getenv("CRAWLER_OUTPUT_DIR", "./crawled_data")
 
 
 class NLPSettings(BaseSettings):

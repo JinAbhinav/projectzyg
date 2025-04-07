@@ -1,0 +1,13 @@
+{
+  "id": 1743955181,
+  "url": "https://www.knosfer.com/",
+  "status": "failed",
+  "created_at": "2025-04-06T21:29:41.641103",
+  "completed_at": null,
+  "parameters": {
+    "keywords": null,
+    "max_depth": 2,
+    "max_pages": 10
+  },
+  "error": "'AsyncWebCrawler' object has no attribute 'run_streaming'"
+}

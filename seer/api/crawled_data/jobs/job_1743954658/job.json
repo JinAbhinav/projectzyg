@@ -1,0 +1,13 @@
+{
+  "id": 1743954658,
+  "url": "https://www.knosfer.com/",
+  "status": "failed",
+  "created_at": "2025-04-06T21:20:58.054152",
+  "completed_at": null,
+  "parameters": {
+    "keywords": null,
+    "max_depth": 2,
+    "max_pages": 10
+  },
+  "error": "asyncio.run() cannot be called from a running event loop"
+}

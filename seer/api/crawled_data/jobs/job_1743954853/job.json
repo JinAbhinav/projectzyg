@@ -1,0 +1,12 @@
+{
+  "id": 1743954853,
+  "url": "https://example.com/",
+  "status": "completed",
+  "created_at": "2025-04-06T21:24:13.553281",
+  "completed_at": "2025-04-06T21:24:15.199512",
+  "parameters": {
+    "keywords": null,
+    "max_depth": 1,
+    "max_pages": 3
+  }
+}

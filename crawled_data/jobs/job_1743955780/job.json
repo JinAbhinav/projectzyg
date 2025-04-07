@@ -1,0 +1,13 @@
+{
+  "id": 1743955780,
+  "url": "https://www.knosfer.com/",
+  "status": "failed",
+  "created_at": "2025-04-06T21:39:40.418642",
+  "completed_at": null,
+  "parameters": {
+    "keywords": null,
+    "max_depth": 2,
+    "max_pages": 10
+  },
+  "error": "CrawlerRunConfig.__init__() got an unexpected keyword argument 'max_depth'"
+}

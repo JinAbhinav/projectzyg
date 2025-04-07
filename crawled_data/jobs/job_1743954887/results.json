@@ -1,0 +1,71 @@
+[
+  {
+    "id": 1,
+    "url": "https://www.knosfer.com/",
+    "title": "Sample Page 1 from www.knosfer.com",
+    "file_path": "crawled_data\\jobs\\job_1743954887\\1_https___www_knosfer_com_.md",
+    "metadata": {
+      "crawled_at": "2025-04-06T21:24:48.079761",
+      "depth": 0,
+      "links": [
+        "https://www.knosfer.com//link0"
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "url": "https://www.knosfer.com//page1",
+    "title": "Sample Page 2 from www.knosfer.com",
+    "file_path": "crawled_data\\jobs\\job_1743954887\\2_https___www_knosfer_com__page1.md",
+    "metadata": {
+      "crawled_at": "2025-04-06T21:24:48.389412",
+      "depth": 1,
+      "links": [
+        "https://www.knosfer.com//link0",
+        "https://www.knosfer.com//link1",
+        "https://www.knosfer.com//link2",
+        "https://www.knosfer.com//link3",
+        "https://www.knosfer.com//link4"
+      ]
+    }
+  },
+  {
+    "id": 3,
+    "url": "https://www.knosfer.com//page2",
+    "title": "Sample Page 3 from www.knosfer.com",
+    "file_path": "crawled_data\\jobs\\job_1743954887\\3_https___www_knosfer_com__page2.md",
+    "metadata": {
+      "crawled_at": "2025-04-06T21:24:48.715810",
+      "depth": 2,
+      "links": []
+    }
+  },
+  {
+    "id": 4,
+    "url": "https://www.knosfer.com//page3",
+    "title": "Sample Page 4 from www.knosfer.com",
+    "file_path": "crawled_data\\jobs\\job_1743954887\\4_https___www_knosfer_com__page3.md",
+    "metadata": {
+      "crawled_at": "2025-04-06T21:24:49.024236",
+      "depth": 2,
+      "links": [
+        "https://www.knosfer.com//link0"
+      ]
+    }
+  },
+  {
+    "id": 5,
+    "url": "https://www.knosfer.com//page4",
+    "title": "Sample Page 5 from www.knosfer.com",
+    "file_path": "crawled_data\\jobs\\job_1743954887\\5_https___www_knosfer_com__page4.md",
+    "metadata": {
+      "crawled_at": "2025-04-06T21:24:49.334978",
+      "depth": 2,
+      "links": [
+        "https://www.knosfer.com//link0",
+        "https://www.knosfer.com//link1",
+        "https://www.knosfer.com//link2"
+      ]
+    }
+  }
+]

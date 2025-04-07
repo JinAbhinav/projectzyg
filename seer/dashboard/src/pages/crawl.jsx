@@ -13,84 +13,62 @@ import { Separator } from '../components/ui/separator';
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
 import { Search, AlertTriangle, FileDown, Link2, Globe, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import axios from 'axios';
 
-// Mock API function - in production, this would call the actual API
+// API base URL
+const API_BASE_URL = 'http://localhost:8000/api';
+
+// Real API functions to interact with our backend
 const startCrawlJob = async (url, keywords, maxDepth, maxPages) => {
-  console.log(`Starting crawl job for: ${url}`);
-  
-  // In a real implementation, this would call the API endpoint
-  // For the demo, we'll simulate a successful response
-  return {
-    job_id: Math.floor(Math.random() * 1000),
-    status: "pending",
-    url
-  };
+  try {
+    const response = await axios.post(`${API_BASE_URL}/v1/crawl`, {
+      url,
+      keywords,
+      max_depth: maxDepth,
+      max_pages: maxPages
+    });
+    
+    return response.data;
+  } catch (error) {
+    console.error("Error starting crawl job:", error);
+    throw new Error(error.response?.data?.detail || "Failed to start crawl job");
+  }
 };
 
-// Mock API function for multiple URLs
 const startMultiCrawlJob = async (urls, keywords, maxDepth, maxPagesPerSite) => {
-  console.log(`Starting multi-crawl job for ${urls.length} URLs`);
-  
-  // In a real implementation, this would call the API endpoint
-  return {
-    job_id: Math.floor(Math.random() * 1000),
-    status: "pending",
-    url: `${urls[0]} and ${urls.length - 1} other sites`
-  };
+  try {
+    const response = await axios.post(`${API_BASE_URL}/v1/crawl/multiple`, {
+      urls,
+      keywords,
+      max_depth: maxDepth,
+      max_pages_per_site: maxPagesPerSite
+    });
+    
+    return response.data;
+  } catch (error) {
+    console.error("Error starting multi-crawl job:", error);
+    throw new Error(error.response?.data?.detail || "Failed to start multi-site crawl job");
+  }
 };
 
-// Mock function to check job status
 const getCrawlStatus = async (jobId) => {
-  // In a real implementation, this would call the API endpoint
-  console.log(`Checking status for job: ${jobId}`);
-  
-  // Simulate different statuses
-  const statuses = ["pending", "in_progress", "in_progress", "completed"];
-  const randomIndex = Math.min(3, Math.floor(Math.random() * 4));
-  
-  return {
-    job_id: jobId,
-    status: statuses[randomIndex],
-    url: "https://example.com"
-  };
+  try {
+    const response = await axios.get(`${API_BASE_URL}/v1/crawl/${jobId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error checking job status:", error);
+    throw new Error(error.response?.data?.detail || "Failed to get job status");
+  }
 };
 
-// Mock function to get crawl results
 const getCrawlResults = async (jobId) => {
-  console.log(`Getting results for job: ${jobId}`);
-  
-  // In a real implementation, this would call the API endpoint
-  // For the demo, we'll return mock data
-  return [
-    {
-      id: 1,
-      url: "https://darkforum.example.com/threats",
-      title: "New Zero-Day Exploit Discussion",
-      content: "# Zero-Day Exploit Discussion\n\nI've discovered a new zero-day vulnerability in Windows Server 2022 that allows remote code execution. The vulnerability affects the HTTP.sys component and can be triggered remotely without authentication.\n\n## Technical Details\n\nThe vulnerability is a memory corruption issue in the HTTP request parsing logic. By sending specially crafted packets to the server, an attacker can execute arbitrary code with SYSTEM privileges.\n\n```\nPOC Code (Do not distribute):\nPOST /vulnerable.aspx HTTP/1.1\nHost: target\nContent-Type: application/x-www-form-urlencoded\nContent-Length: 4096\n\n[PAYLOAD REDACTED]\n```\n\nI'm looking for serious buyers only. Starting price is 120k USD in XMR.",
-      content_type: "text/markdown",
-      metadata: {
-        crawled_at: "2023-04-06T10:15:22.000Z",
-        links: ["https://darkforum.example.com/profiles/zeroday", "https://darkforum.example.com/buy"],
-        depth: 1,
-        results_dir: "/crawled_data/darkforum.example.com_20230406_101522"
-      },
-      results_dir: "/crawled_data/darkforum.example.com_20230406_101522"
-    },
-    {
-      id: 2, 
-      url: "https://hackermarket.onion.example/listings",
-      title: "Ransomware as a Service - New Payment Models",
-      content: "# Ransomware as a Service - Premium Offering\n\nOur ransomware service now offers a 70/30 split with affiliates. Target finance, healthcare, and education sectors for maximum returns.\n\n## Features\n\n- Fully automated encryption\n- Secure payment portal\n- Customer support for victims\n- Double extortion with data exfiltration\n\n## Terms\n\n- 70% of ransom to affiliates\n- 30% to the platform\n- Minimum ransom amount: 10 BTC\n- No targeting of critical infrastructure in CIS countries\n\nContact admin for access to the affiliate program. Serious inquiries only.",
-      content_type: "text/markdown",
-      metadata: {
-        crawled_at: "2023-04-06T10:16:05.000Z",
-        links: ["https://hackermarket.onion.example/contact", "https://hackermarket.onion.example/affiliate"],
-        depth: 1,
-        results_dir: "/crawled_data/hackermarket.onion.example_20230406_101605"
-      },
-      results_dir: "/crawled_data/hackermarket.onion.example_20230406_101605"
-    }
-  ];
+  try {
+    const response = await axios.get(`${API_BASE_URL}/v1/crawl/${jobId}/results`);
+    return response.data;
+  } catch (error) {
+    console.error("Error getting crawl results:", error);
+    throw new Error(error.response?.data?.detail || "Failed to get crawl results");
+  }
 };
 
 export default function CrawlPage() {
@@ -125,16 +103,22 @@ export default function CrawlPage() {
           setJobStatus(status.status);
           
           if (status.status === "completed") {
-            const jobResults = await getCrawlResults(currentJobId);
-            setResults(jobResults);
-            toast.success("Crawl job completed successfully!");
-            setIsLoading(false);
+            try {
+              const jobResults = await getCrawlResults(currentJobId);
+              setResults(jobResults);
+              toast.success("Crawl job completed successfully!");
+            } catch (error) {
+              toast.error(`Error getting results: ${error.message}`);
+            } finally {
+              setIsLoading(false);
+            }
           } else if (status.status === "failed") {
             toast.error("Crawl job failed. Please try again.");
             setIsLoading(false);
           }
         } catch (error) {
           console.error("Error checking job status:", error);
+          toast.error(`Error checking status: ${error.message}`);
         }
       }, 3000);
     }
@@ -173,7 +157,7 @@ export default function CrawlPage() {
       toast.info(`Started crawl job #${response.job_id}`);
     } catch (error) {
       console.error("Error starting crawl job:", error);
-      toast.error("Failed to start crawl job");
+      toast.error(`Failed to start crawl job: ${error.message}`);
       setIsLoading(false);
     }
   };
@@ -220,7 +204,7 @@ export default function CrawlPage() {
       toast.info(`Started multi-site crawl job #${response.job_id}`);
     } catch (error) {
       console.error("Error starting multi-site crawl job:", error);
-      toast.error("Failed to start multi-site crawl job");
+      toast.error(`Failed to start multi-site crawl job: ${error.message}`);
       setIsLoading(false);
     }
   };
@@ -236,6 +220,18 @@ export default function CrawlPage() {
     const start = url.substring(0, 30);
     const end = url.substring(url.length - 15);
     return `${start}...${end}`;
+  };
+
+  // Open the folder containing the crawl results
+  const openFolder = (folderPath) => {
+    if (!folderPath) return;
+    
+    // This is a mock function for now - in a real implementation,
+    // you would need to communicate with the backend to open the folder
+    toast.info(`Opening folder: ${folderPath}`);
+    
+    // In a desktop app context, you might use:
+    // window.electron.openFolder(folderPath)
   };
   
   return (
@@ -532,7 +528,7 @@ export default function CrawlPage() {
                               <span>{formatUrl(result.url)}</span>
                             </div>
                             <div className="text-xs text-muted-foreground mt-1">
-                              {new Date(result.metadata.crawled_at).toLocaleString()}
+                              {new Date(result.metadata?.crawled_at || Date.now()).toLocaleString()}
                             </div>
                           </div>
                         ))}
@@ -561,7 +557,11 @@ export default function CrawlPage() {
                             <div className="flex items-center justify-between">
                               <h4 className="font-medium">Metadata</h4>
                               {selectedResult.results_dir && (
-                                <Button variant="outline" size="sm">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => openFolder(selectedResult.results_dir)}
+                                >
                                   <FileDown className="h-4 w-4 mr-1" />
                                   Open Folder
                                 </Button>
@@ -569,9 +569,9 @@ export default function CrawlPage() {
                             </div>
                             
                             <div className="bg-muted p-2 rounded-md text-xs">
-                              <div><span className="font-medium">Crawled:</span> {new Date(selectedResult.metadata.crawled_at).toLocaleString()}</div>
-                              <div><span className="font-medium">Depth:</span> {selectedResult.metadata.depth}</div>
-                              <div><span className="font-medium">Links:</span> {selectedResult.metadata.links.length}</div>
+                              <div><span className="font-medium">Crawled:</span> {new Date(selectedResult.metadata?.crawled_at || Date.now()).toLocaleString()}</div>
+                              <div><span className="font-medium">Depth:</span> {selectedResult.metadata?.depth || 0}</div>
+                              <div><span className="font-medium">Links:</span> {selectedResult.metadata?.links?.length || 0}</div>
                               {selectedResult.results_dir && (
                                 <div><span className="font-medium">Storage:</span> {selectedResult.results_dir}</div>
                               )}
