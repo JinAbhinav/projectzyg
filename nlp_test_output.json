@@ -1,0 +1,27 @@
+{
+  "summary": "Security researchers have found a new ransomware, \"HealthLock\", that targets healthcare organizations in Europe. It uses a zero-day vulnerability in popular hospital management software to encrypt medical records and requires cryptocurrency for payment. Hospitals in the UK and Germany have already reported infections.",
+  "threat_classification": {
+    "Threat_Category": [
+      {
+        "Type": "Ransomware",
+        "Confidence_Score": 0.95,
+        "Severity": "HIGH",
+        "Potential_Targets": [
+          "Healthcare Organizations",
+          "Hospitals",
+          "Medical Software Vendors"
+        ],
+        "Justification": "The description mentions 'ransomware strain' and 'demands payment in cryptocurrency' indicating a ransomware attack."
+      },
+      {
+        "Type": "Zero-day vulnerability",
+        "Confidence_Score": 0.85,
+        "Severity": "CRITICAL",
+        "Potential_Targets": [
+          "Hospitals using specified management software"
+        ],
+        "Justification": "The threat exploits a 'zero-day vulnerability in popular hospital management software' thus indicating a Zero-day vulnerability."
+      }
+    ]
+  }
+}

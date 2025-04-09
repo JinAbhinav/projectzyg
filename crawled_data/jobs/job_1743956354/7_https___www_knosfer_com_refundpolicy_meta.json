@@ -1,0 +1,13 @@
+{
+  "url": "https://www.knosfer.com/refundpolicy",
+  "title": "Refund Policy",
+  "content": "<div class=\"content\">\n<div class=\"text-center msg loading\"></div>\n<div class=\"text-center msg noItems\" style=\"display: none;\">\n                        There are no items in your cart<br/>\n<a class=\"btn btn-primary\" href=\"/s/store\" style=\"margin: 20px auto;\">\n                            Add More\n                        </a>\n</div>\n<div class=\"items msg\" style=\"display: none;\">\n<div class=\"m-0 cartDiv\">\n<table class=\"table cartTable\">\n<thead>\n<tr>\n<th colspan=\"2\">Item Details</th>\n<th class=\"text-right\">Price</th>\n<th style=\"width: 50px;\"></th>\n</tr>\n</thead>\n<tbody></tbody>\n</table>\n</div>\n<div class=\"suggestCart mt-2 bg-gray p-2\" style=\"display: none;\">\n<h6>You may also be interested in</h6>\n<div class=\"columns loading\" id=\"cartRelatedCont\"></div>\n</div>\n</div>\n</div>",
+  "content_type": "text/markdown",
+  "metadata": {
+    "crawled_at": "2025-04-06T21:49:40.786795",
+    "depth": 0,
+    "links": [],
+    "description": "",
+    "language": "en"
+  }
+}

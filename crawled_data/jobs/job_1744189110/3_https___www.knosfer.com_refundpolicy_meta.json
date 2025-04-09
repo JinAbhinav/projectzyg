@@ -1,0 +1,65 @@
+{
+  "meta_tags": {},
+  "favicon": "",
+  "canonical_url": "",
+  "open_graph": {},
+  "twitter_card": {},
+  "structured_data": [],
+  "element_counts": {
+    "p": 2,
+    "a": 16,
+    "img": 1,
+    "h1": 0,
+    "h2": 1,
+    "h3": 1,
+    "h4": 0,
+    "h5": 0,
+    "h6": 1,
+    "ul": 1,
+    "ol": 0,
+    "li": 3,
+    "table": 1,
+    "form": 0,
+    "input": 2
+  },
+  "images": [
+    {
+      "url": "https://www.knosfer.com/resources/images/grvector.svg",
+      "alt": "Launch your Graphy",
+      "width": "",
+      "height": ""
+    }
+  ],
+  "headings": [
+    {
+      "level": 2,
+      "text": "Refund Policy"
+    },
+    {
+      "level": 3,
+      "text": "Contact us for any issues:"
+    },
+    {
+      "level": 6,
+      "text": "You may also be interested in"
+    }
+  ],
+  "contact_info": {
+    "email": "sandy@knosfer.com",
+    "phone": "",
+    "social_media": {
+      "facebook": "https://www.facebook.com/knosfer",
+      "instagram": "https://www.instagram.com/invites/contact/?i=y3o1k1oacwwb&utm_content=pdpkj9b",
+      "twitter": "https://twitter.com/knosfer_off?t=__yVNwluFWVa5R54po4Cqg&s=09",
+      "youtube": "https://www.youtube.com/channel/UCDnceKKpwwIpsRgE8sYB_Bw"
+    }
+  },
+  "text_length": 849,
+  "word_count": 133,
+  "domain": "www.knosfer.com",
+  "path": "/refundpolicy",
+  "page_type": "Product Page",
+  "crawled_at": "2025-04-09T14:28:27.489806",
+  "depth": 2,
+  "last_fetched": "2025-04-09T14:28:27.489814"
+}

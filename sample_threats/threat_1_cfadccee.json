@@ -1,0 +1,9 @@
+{
+  "url": "https://security-blog.com/banking-malware-spotted",
+  "content": "\n            Security researchers have identified a new banking trojan targeting financial institutions.\n            The malware uses sophisticated techniques to evade detection and can steal banking credentials.\n            It primarily spreads through phishing emails that appear to come from legitimate banks.\n            Several banks in North America have already reported incidents related to this malware.\n            ",
+  "timestamp": 1744096065.4237251,
+  "source_type": "blog",
+  "depth": 1,
+  "domain": "security-blog.com",
+  "language": "en"
+}

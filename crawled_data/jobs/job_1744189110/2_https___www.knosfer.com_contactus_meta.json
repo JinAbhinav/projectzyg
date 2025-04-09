@@ -1,0 +1,67 @@
+{
+  "meta_tags": {},
+  "favicon": "",
+  "canonical_url": "",
+  "open_graph": {},
+  "twitter_card": {},
+  "structured_data": [],
+  "element_counts": {
+    "p": 6,
+    "a": 16,
+    "img": 1,
+    "h1": 1,
+    "h2": 0,
+    "h3": 0,
+    "h4": 0,
+    "h5": 0,
+    "h6": 1,
+    "ul": 0,
+    "ol": 0,
+    "li": 0,
+    "table": 1,
+    "form": 1,
+    "input": 5
+  },
+  "images": [
+    {
+      "url": "https://www.knosfer.com/resources/images/grvector.svg",
+      "alt": "Launch your Graphy",
+      "width": "",
+      "height": ""
+    }
+  ],
+  "headings": [
+    {
+      "level": 1,
+      "text": "Get in touch"
+    },
+    {
+      "level": 6,
+      "text": "You may also be interested in"
+    }
+  ],
+  "contact_info": {
+    "email": "Sandy@knosfer.com",
+    "phone": "",
+    "social_media": {
+      "facebook": "https://www.facebook.com/knosfer",
+      "instagram": "https://www.instagram.com/invites/contact/?i=y3o1k1oacwwb&utm_content=pdpkj9b",
+      "twitter": "https://twitter.com/knosfer_off?t=__yVNwluFWVa5R54po4Cqg&s=09",
+      "youtube": "https://www.youtube.com/channel/UCDnceKKpwwIpsRgE8sYB_Bw"
+    },
+    "has_contact_form": true
+  },
+  "text_length": 592,
+  "word_count": 96,
+  "domain": "www.knosfer.com",
+  "path": "/contactus",
+  "page_type": "Contact Page",
+  "crawled_at": "2025-04-09T14:28:26.537448",
+  "depth": 1,
+  "last_fetched": "2025-04-09T14:28:26.537457",
+  "links": [
+    "https://www.knosfer.com/s/store",
+    "https://www.knosfer.com/s/checkout",
+    "https://www.knosfer.com/refundpolicy"
+  ]
+}

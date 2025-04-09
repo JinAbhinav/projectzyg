@@ -1,0 +1,54 @@
+[
+  {
+    "id": 1,
+    "url": "https://www.knosfer.com/",
+    "title": "Knosfer",
+    "file_path": "crawled_data\\jobs\\job_1743957515\\1_https___www_knosfer_com_.md",
+    "metadata": {
+      "crawled_at": "2025-04-06T22:08:36.732411",
+      "depth": 0,
+      "links": [],
+      "description": "",
+      "language": "en"
+    }
+  },
+  {
+    "id": 2,
+    "url": "https://www.knosfer.com/s/checkout",
+    "title": "Log In",
+    "file_path": "crawled_data\\jobs\\job_1743957515\\2_https___www_knosfer_com_s_checkout.md",
+    "metadata": {
+      "crawled_at": "2025-04-06T22:08:41.169402",
+      "depth": 0,
+      "links": [],
+      "description": "",
+      "language": "en"
+    }
+  },
+  {
+    "id": 3,
+    "url": "https://www.knosfer.com/contactus",
+    "title": "Contact Us",
+    "file_path": "crawled_data\\jobs\\job_1743957515\\3_https___www_knosfer_com_contactus.md",
+    "metadata": {
+      "crawled_at": "2025-04-06T22:08:47.594307",
+      "depth": 0,
+      "links": [],
+      "description": "",
+      "language": "en"
+    }
+  },
+  {
+    "id": 4,
+    "url": "https://www.knosfer.com/refundpolicy",
+    "title": "Refund Policy",
+    "file_path": "crawled_data\\jobs\\job_1743957515\\4_https___www_knosfer_com_refundpolicy.md",
+    "metadata": {
+      "crawled_at": "2025-04-06T22:08:49.296204",
+      "depth": 0,
+      "links": [],
+      "description": "",
+      "language": "en"
+    }
+  }
+]

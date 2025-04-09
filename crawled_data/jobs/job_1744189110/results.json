@@ -1,0 +1,26 @@
+[
+  {
+    "url": "https://www.knosfer.com",
+    "title": "Knosfer",
+    "content_length": 1136,
+    "depth": 0
+  },
+  {
+    "url": "https://www.knosfer.com/contactus",
+    "title": "Contact Us",
+    "content_length": 296,
+    "depth": 1
+  },
+  {
+    "url": "https://www.knosfer.com/refundpolicy",
+    "title": "Refund Policy",
+    "content_length": 542,
+    "depth": 2
+  },
+  {
+    "url": "https://www.knosfer.com/s/checkout",
+    "title": "Log In",
+    "content_length": 0,
+    "depth": 2
+  }
+]

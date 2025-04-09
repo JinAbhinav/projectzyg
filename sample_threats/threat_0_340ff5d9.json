@@ -1,0 +1,9 @@
+{
+  "url": "https://example.darkforum.onion/thread/123",
+  "content": "\n            We've just discovered a new vulnerability in Microsoft Exchange Server that allows remote code execution.\n            No patch is available yet. Our tool can exploit this vulnerability to gain complete access to email servers.\n            Testing shows it works on all versions from 2016 to 2019. Selling access for 15 BTC.\n            ",
+  "timestamp": 1744182465.4237251,
+  "source_type": "dark_web",
+  "depth": 2,
+  "domain": "example.darkforum.onion",
+  "language": "en"
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "url": "https://example.com/",
+    "title": "Sample Page 1 from example.com",
+    "file_path": "crawled_data\\jobs\\job_1743954853\\1_https___example_com_.md",
+    "metadata": {
+      "crawled_at": "2025-04-06T21:24:14.555186",
+      "depth": 0,
+      "links": [
+        "https://example.com//link0",
+        "https://example.com//link1",
+        "https://example.com//link2",
+        "https://example.com//link3"
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "url": "https://example.com//page1",
+    "title": "Sample Page 2 from example.com",
+    "file_path": "crawled_data\\jobs\\job_1743954853\\2_https___example_com__page1.md",
+    "metadata": {
+      "crawled_at": "2025-04-06T21:24:14.857581",
+      "depth": 1,
+      "links": [
+        "https://example.com//link0",
+        "https://example.com//link1",
+        "https://example.com//link2",
+        "https://example.com//link3"
+      ]
+    }
+  }
+]
