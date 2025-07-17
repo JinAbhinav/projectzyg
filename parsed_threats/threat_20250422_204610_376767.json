@@ -1,0 +1,68 @@
+{
+    "title": "Leaked Credentials from Internal System",
+    "description": "A credentials dump has been leaked from an internal system, potentially due to a phishing campaign targeting employees. The leak includes user credentials from internal.corp and sample.org, and affects the primary authentication server and related databases.",
+    "threat_type": "Data Breach",
+    "severity": "HIGH",
+    "confidence": 0.9,
+    "tactics": [
+        "Credential Access",
+        "Initial Access"
+    ],
+    "techniques": [
+        "T1078: Valid Accounts",
+        "T1566: Phishing"
+    ],
+    "threat_actors": null,
+    "indicators": [
+        {
+            "type": "email",
+            "value": "admin@internal.corp",
+            "confidence": 0.9,
+            "description": null
+        },
+        {
+            "type": "email",
+            "value": "support@sample.org",
+            "confidence": 0.9,
+            "description": null
+        },
+        {
+            "type": "email",
+            "value": "j.doe@internal.corp",
+            "confidence": 0.9,
+            "description": null
+        },
+        {
+            "type": "username",
+            "value": "finance_user",
+            "confidence": 0.9,
+            "description": null
+        }
+    ],
+    "affected_systems": [
+        {
+            "name": "Primary Authentication Server",
+            "type": "Server",
+            "version": null,
+            "impact": "Potential unauthorized access and data exfiltration"
+        },
+        {
+            "name": "Related Databases",
+            "type": "Database",
+            "version": null,
+            "impact": "Potential unauthorized access and data exfiltration"
+        }
+    ],
+    "mitigations": [
+        "Immediate password rotation for all affected users",
+        "Conduct a comprehensive system audit",
+        "Enable multi-factor authentication",
+        "Monitor network traffic for unusual activity",
+        "Check logs for access patterns related to leaked credentials"
+    ],
+    "references": [],
+    "source_url": "http://pastesite.local/paste=abc",
+    "discovery_date": null,
+    "created_at": "2025-04-22T20:46:10.374790",
+    "updated_at": "2025-04-22T20:46:10.374799"
+}

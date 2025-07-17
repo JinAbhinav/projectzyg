@@ -1,12 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Shield, AlertTriangle, Search, Bell, BarChart, Settings, Menu, X } from 'lucide-react';
+import { Shield, AlertTriangle, Search, Bell, BarChart, Settings, Menu, X, Brain, BrainCircuit, GitFork } from 'lucide-react';
 import { Button } from '../ui/button';
 
 const NavItem = ({ href, icon: Icon, children, isActive }) => {
   return (
-    <Link href={href} passHref>
+    <Link href={href} passHref legacyBehavior>
       <Button
         variant="ghost"
         className={`w-full justify-start ${
@@ -28,7 +28,10 @@ export function Navbar() {
     { href: '/dashboard', label: 'Dashboard', icon: BarChart },
     { href: '/crawl', label: 'Crawler', icon: Search },
     { href: '/threats', label: 'Threats', icon: AlertTriangle },
+    { href: '/parser', label: 'NLP/LLM Parser', icon: Brain },
     { href: '/alerts', label: 'Alerts', icon: Bell },
+    { href: '/ai-analyzer', label: 'SEER AI', icon: BrainCircuit },
+    { href: '/graph-explorer', label: 'Threat Map', icon: GitFork },
     { href: '/settings', label: 'Settings', icon: Settings },
   ];
 

@@ -1,0 +1,19 @@
+# Core API & Server
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+python-dotenv>=0.20.0
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+
+# Task Queueing (for API to enqueue jobs)
+rq>=1.15.0
+redis>=5.0.0 # For connecting to Redis to enqueue tasks
+
+# Add requests if your API makes outbound calls for other reasons (optional)
+requests
+
+# NLP/LLM Tools - Only if API directly uses them, otherwise they belong in worker
+openai>=1.0.0
+# langchain>=0.1.0 
+
+supabase>=1.0.0 # For Supabase interactions from API/NLP engine 

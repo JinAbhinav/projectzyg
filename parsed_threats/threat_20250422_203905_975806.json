@@ -1,0 +1,41 @@
+{
+    "title": "Exploitation of CVE-2024-XXXX Targeting Financial Institutions",
+    "description": "There is a discussion about exploiting CVE-2024-XXXX, which targets financial institutions. A proof of concept (PoC) might be available soon.",
+    "threat_type": "Vulnerability Exploitation",
+    "severity": "HIGH",
+    "confidence": 0.7,
+    "tactics": [
+        "Initial Access",
+        "Execution"
+    ],
+    "techniques": [
+        "Exploit Public-Facing Application"
+    ],
+    "threat_actors": null,
+    "indicators": [
+        {
+            "type": "IP",
+            "value": "192.168.1.100",
+            "confidence": 0.8,
+            "description": null
+        }
+    ],
+    "affected_systems": [
+        {
+            "name": "Financial Institution Systems",
+            "type": "Software",
+            "version": "Unknown",
+            "impact": "Potential unauthorized access and data breach"
+        }
+    ],
+    "mitigations": [
+        "Monitor for connections to the IP address 192.168.1.100.",
+        "Apply patches for CVE-2024-XXXX once available.",
+        "Implement network segmentation to protect critical systems."
+    ],
+    "references": [],
+    "source_url": "http://darkforum.local/thread=123",
+    "discovery_date": null,
+    "created_at": "2025-04-22T20:39:05.974264",
+    "updated_at": "2025-04-22T20:39:05.974272"
+}

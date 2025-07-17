@@ -12,11 +12,6 @@
   ],
   "rootMainFiles": [],
   "pages": {
-    "/": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/index.js"
-    ],
     "/_app": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
@@ -27,15 +22,20 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/crawl": [
+    "/ai-analyzer": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/crawl.js"
+      "static/chunks/pages/ai-analyzer.js"
     ],
-    "/dashboard": [
+    "/alerts": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/dashboard.js"
+      "static/chunks/pages/alerts.js"
+    ],
+    "/graph-explorer": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/graph-explorer.js"
     ]
   },
   "ampFirstPages": []

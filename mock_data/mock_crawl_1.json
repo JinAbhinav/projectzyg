@@ -1,0 +1,23 @@
+{
+  "job_id": 1001,
+  "url": "http://darkforum.local/thread=123",
+  "status": "completed",
+  "results": [
+    {
+      "id": 1,
+      "url": "http://darkforum.local/thread=123",
+      "title": "New Exploit Discussion - CVE-2024-XXXX",
+      "content": "Discussion about exploiting CVE-2024-XXXX targeting financial institutions. PoC might be available soon. Watch out for connections to 192.168.1.100.",
+      "content_type": "text/plain",
+      "metadata": {
+        "timestamp": "2024-08-15T10:30:00Z",
+        "source_type": "forum",
+        "extracted_iocs": {
+          "cves": ["CVE-2024-XXXX"],
+          "ips": ["192.168.1.100"],
+          "sectors": ["financial"]
+        }
+      }
+    }
+  ]
+} 

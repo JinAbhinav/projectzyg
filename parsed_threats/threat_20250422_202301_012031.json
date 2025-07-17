@@ -1,0 +1,62 @@
+{
+    "title": "Credential Leak from Internal System",
+    "description": "A leaked credentials dump from an internal system has been identified, potentially linked to a recent security incident. The leak includes usernames and passwords for internal.corp and sample.org domains. The initial access vector is suspected to be a phishing campaign targeting employees.",
+    "threat_type": "Data Breach",
+    "severity": "HIGH",
+    "confidence": 0.9,
+    "tactics": [
+        "Credential Access",
+        "Initial Access"
+    ],
+    "techniques": [
+        "T1078: Valid Accounts",
+        "T1566: Phishing"
+    ],
+    "threat_actors": null,
+    "indicators": [
+        {
+            "type": "email",
+            "value": "admin@internal.corp",
+            "confidence": 0.8,
+            "description": null
+        },
+        {
+            "type": "email",
+            "value": "support@sample.org",
+            "confidence": 0.8,
+            "description": null
+        },
+        {
+            "type": "email",
+            "value": "j.doe@internal.corp",
+            "confidence": 0.8,
+            "description": null
+        }
+    ],
+    "affected_systems": [
+        {
+            "name": "Primary Authentication Server",
+            "type": "Server",
+            "version": null,
+            "impact": "Potential unauthorized access to user accounts"
+        },
+        {
+            "name": "Related Databases",
+            "type": "Database",
+            "version": null,
+            "impact": "Potential data exfiltration"
+        }
+    ],
+    "mitigations": [
+        "Immediate password rotation for all affected users",
+        "Conduct a comprehensive system audit",
+        "Enable multi-factor authentication",
+        "Monitor network traffic for unusual activity",
+        "Check logs for access patterns related to compromised credentials"
+    ],
+    "references": [],
+    "source_url": "http://pastesite.local/paste=abc",
+    "discovery_date": null,
+    "created_at": "2025-04-22T20:23:01.008821",
+    "updated_at": "2025-04-22T20:23:01.008830"
+}

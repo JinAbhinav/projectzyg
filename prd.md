@@ -1,156 +1,168 @@
-Here's a **Production-Ready PRD (Product Requirements Document)** for **SEER**, structured for an LLM to fully understand, reason over, and contribute to. It includes detailed sections on features, architecture, technologies, and integration with tools like **Crawl4AI** for deep crawling.
+**Product Requirements Document (PRD)**
 
 ---
 
-# 📄 Product Requirements Document (PRD)  
-## 🛡️ Project: SEER – AI-Powered Cyber Threat Prediction & Early Warning System  
+## Project Name: SEER
+
+**Full Name:** Security Early Event Radar
+
+**Category:** Cyber Threat Intelligence System
+
+**Project Type:** College-level cybersecurity capstone (safe, research-based)
+
+**Objective:** To develop a proactive cyber threat prediction and alerting system that leverages dark web crawling, AI-powered NLP, threat enrichment, network sniffing, and machine learning to identify and forecast cyberattacks.
 
 ---
 
-## 1. 🧠 Overview
+## 1. Executive Summary
 
-**SEER** is an advanced cybersecurity tool that leverages **AI, threat intelligence, and deep web crawling** to detect and predict cyber threats before they escalate into attacks. It continuously scans the **surface web, deep web, and dark web** for indicators of compromise (IOCs), using machine learning to **predict trends**, and **notifies organizations and individuals in real-time**.  
-
----
-
-## 2. 🎯 Goals
-
-| Objective | Description |
-|----------|-------------|
-| 🔍 Threat Intelligence | Detect early indicators of cyberattacks through dark web and deep web data. |
-| 🤖 Predictive Defense | Forecast cyberattacks using pattern recognition and past threat data. |
-| ⚠️ Real-Time Alerts | Notify users when they are likely to be targeted or their data is compromised. |
-| 🧩 Integrations | Seamlessly connect with security systems (SIEMs, firewalls, email, Slack, APIs). |
+SEER is an AI-driven early warning system that identifies, classifies, and forecasts cyber threats by combining multi-source threat intelligence (dark web forums, marketplaces, leak sites) with real-time network packet sniffing and anomaly detection. It enables security professionals and researchers to stay ahead of evolving threats by providing actionable insights through predictive modeling and an interactive dashboard.
 
 ---
 
-## 3. 🧩 Key Features
+## 2. Key Features
 
-### 3.1 🌐 Deep/Dark Web Intelligence using Crawl4AI  
-- Crawl dark web forums, Telegram channels, paste sites, hacker marketplaces, onion sites.  
-- Leverage **Crawl4AI** for deep recursive link traversal and NLP enrichment.  
-- Auto-detect keywords related to:  
-  - Leaked credentials  
-  - Malware listings  
-  - Exploit kits  
-  - Targeted organizations or IPs  
-  - Zero-day vulnerabilities  
+### 2.1 Dark Web & Deep Web Crawling
 
-### 3.2 🧠 AI-Powered NLP Analysis  
-- Use LLMs (GPT-4 or LLaMA) + spaCy/NLTK for semantic tagging.  
-- Classify documents/posts into threat categories: Phishing, DDoS, Ransomware, Exploit Trading, etc.  
-- Generate metadata: confidence score, severity, potential targets.  
-- Create embeddings for clustering similar threats.
+- Use of **Crawl4AI** or alternatives (OnionCrawler, Scrapy + Tor)
+- Target forums, paste sites, Telegram groups, and marketplaces
+- Extract IOCs: Leaked credentials, malware, exploits, C2 infra
 
-### 3.3 📊 Threat Trend Prediction  
-- ML models trained on datasets like:  
-  - MITRE ATT&CK  
-  - CISA alerts  
-  - MISP (Malware Information Sharing Platform)  
-- Detect anomaly patterns in attack behavior.  
-- Forecast threat surges using time-series forecasting (ARIMA/LSTM models).
+### 2.2 NLP + LLM Threat Parsing
 
-### 3.4 📢 Real-Time Notification Engine  
-- Triggers based on severity/confidence thresholds.  
-- Sends notifications to:  
-  - Email  
-  - Slack/Webhooks  
-  - Custom API endpoints  
-- Optional: SMS or push notifications.
+- Semantic analysis of scraped content using transformers (BERT/GPT models)
+- Entity extraction: threat actor names, malware types, target organizations
+- Sentiment classification (intent, urgency, probability of attack)
 
-### 3.5 🖥️ Web-Based Intelligence Dashboard  
-- Built with React.js + TailwindCSS.  
-- Displays:  
-  - Threat heatmaps  
-  - Timeline graphs of trending threats  
-  - Live feed of discovered IOCs  
-  - System status & alerts  
-- Includes filtering (region, industry, threat type).
+### 2.3 Threat Intelligence Enrichment
+
+- Cross-reference data with:
+  - **HaveIBeenPwned API**
+  - **AlienVault OTX**
+  - **MISP** and **AbuseIPDB**
+- Validate severity, credibility, and novelty of threats
+
+### 2.4 Predictive Modeling (ML)
+
+- Time-series modeling (LSTM, Prophet) for forecasting attack trends
+- Predict likely sectors, attack types, and timelines
+
+### 2.5 Real-time Alert Engine
+
+- **Purpose:** Proactively notify users about high-priority threats or anomalies detected by the SEER pipeline.
+- **Alert Triggers:** Alerts can be triggered based on configurable conditions, including:
+    - **High Severity/Confidence Threats:** Detection of threats (from NLP/LLM parser or enrichment) exceeding predefined severity (e.g., CRITICAL, HIGH) and/or confidence thresholds.
+    - **Specific IOC Matches:** Configurable rules to alert if specific indicators (IPs, domains, hashes, CVEs) are detected during crawling or enrichment.
+    - **Network Anomalies:** Alerts generated by the Network Sniffing module based on detected suspicious patterns (e.g., potential C2 communication, data exfiltration signatures) exceeding a risk score.
+    - **Predictive Thresholds:** Alerts based on ML model predictions (e.g., forecasted spike in a specific attack type targeting a relevant sector).
+    - **Keyword Monitoring:** (Optional) Alerts based on specific keywords appearing in crawled content.
+- **Configuration:**
+    - **UI Interface:** Users can configure alert rules, thresholds, and notification channels via the Dashboard.
+    - **Rule Granularity:** Define rules based on threat type, severity, confidence score, data source, specific IOCs, or keywords.
+    - **Channel Selection:** Choose one or more notification methods per rule (Email, Slack, generic Webhook).
+- **Notification Channels:**
+    - **Email:** Send formatted alert emails using SMTP.
+    *   **Slack:** Post alert messages to configured Slack channels via Slack Incoming Webhooks.
+    *   **Generic Webhook:** Send a JSON payload containing alert details to a user-defined webhook URL.
+- **Alert Content:** Notifications should include key information:
+    - Alert Type (Threat Detected, Network Anomaly, Prediction, etc.)
+    - Threat Title / Anomaly Description
+    - Severity / Risk Score
+    - Timestamp
+    - Source (e.g., Crawl URL, Network Interface)
+    - Key Indicators (IPs, CVEs, Hashes etc.)
+    - Link back to the relevant view in the SEER Dashboard.
+- **Debouncing/Throttling:** Implement mechanisms to prevent alert fatigue:
+    - Group similar alerts occurring within a short time window.
+    - Rate limit notifications per channel or per rule.
+- **Implementation Notes:**
+    - Can leverage a background task queue (like Celery with Redis/RabbitMQ) for reliable alert dispatching.
+    - Requires secure storage of credentials/API keys for notification services.
+
+### 2.6 Interactive Dashboard
+
+- Built with **React.js + TailwindCSS**
+- Live threat map, historical charts, filters (date/type/severity)
+- IOC search, case view, and export (PDF/JSON)
+
+### 2.7 Network Sniffing & Local Threat Detection
+
+- Packet inspection using **Scapy**/**PyShark**
+- Detect:
+  - Suspicious IP/domain access
+  - Exfiltration behavior
+  - Malware communication attempts
+- Signature + anomaly-based hybrid detection
+- Correlate sniffed data with crawled threat signals
 
 ---
 
-## 4. 🏗️ System Architecture
-
-### 🔄 Data Flow
+## 3. Technical Architecture
 
 ```
-[ Crawl4AI ] → [ NLP/LLM Pipeline ] → [ Threat Classification ] → [ ML Prediction Engine ] → [ Alert Engine ] → [ Dashboard + External Integrations ]
++------------------+       +---------------------------+        +-----------------+
+|   Crawl4AI /     |-----> |  NLP + LLM Threat Parsing | -----> | Threat Database |
+|   OnionCrawler   |       +---------------------------+        +--------+--------+
++------------------+                                                |
+      ^                                                        +----v----+
+      |                                                        | ML Model|
++------------------+                                           +----+----+
+| Network Sniffer  |<-----------------------------------------------|
++------------------+                                                |
+       |                                                      +-----v------+
+       +----------------------------------------------------->|  Alert Engine |
+                                                              +-----+------+
+                                                                    |
+                                                              +-----v------+
+                                                              |  Dashboard  |
+                                                              +------------+
 ```
 
 ---
 
-### 📦 Modules Breakdown
+## 4. Use Cases
 
-| Module | Functionality |
-|--------|---------------|
-| `crawler.py` | Interface to Crawl4AI, configured with keywords, recursion limits, and content handlers. |
-| `nlp_engine.py` | Tokenizes, tags, embeds, and classifies text using spaCy/transformers. |
-| `predictor.py` | ML model for anomaly detection and forecasting based on threat evolution. |
-| `alert_dispatcher.py` | Formats alert objects and sends them via email, webhook, or Slack. |
-| `dashboard/` | React + Flask backend for live visualization and user interaction. |
-
----
-
-## 5. 🔐 Security & Compliance
-
-- Ensure crawling respects legal boundaries (use vetted, open-source dark web monitors).  
-- Log all activities and protect user data with AES-256 encryption.  
-- Comply with GDPR, CCPA (no personally identifiable data stored without consent).  
-- All backend services served over HTTPS.  
+| Persona     | Use Case                                                  | Outcome                                |
+| ----------- | --------------------------------------------------------- | -------------------------------------- |
+| SOC Analyst | Detects emerging ransomware campaign via dark web signals | Takes action before attack reaches org |
+| Researcher  | Monitors credential leaks related to healthcare           | Publishes threat report                |
+| Student     | Uses SEER for hands-on threat intel demo                  | Learns OSINT + ML concepts             |
+| Blue Team   | Detects unusual DNS traffic from local network            | Blocks potential C2 callout            |
 
 ---
 
-## 6. 🔧 Tech Stack
+## 5. Tech Stack
 
-| Layer | Tools |
-|-------|-------|
-| Crawling | Crawl4AI, Scrapy, Selenium, Tor proxies |
-| NLP | OpenAI API, LangChain, Hugging Face Transformers, spaCy |
-| Machine Learning | scikit-learn, XGBoost, PyTorch (LSTM), Prophet |
-| Backend | Flask/FastAPI |
-| Frontend | React.js + TailwindCSS |
-| Database | PostgreSQL + Redis for caching |
-| Deployment | Docker, NGINX, AWS/GCP |
+- **Crawling**: Crawl4AI, onion crawler, Scrapy, Tor Proxy
+- **Language Models**: HuggingFace Transformers (BERT, GPT-2, etc.)
+- **Dashboard**: React.js, TailwindCSS, D3.js
+- **Backend**: Flask / FastAPI, Supabase
+- **Network Monitor**: Scapy, PyShark
+- **ML/Prediction**: PyTorch, Prophet, Isolation Forest
+- **Deployment**: Docker, NGINX, optional air-gapped mode
 
 ---
 
-## 7. 🔬 Datasets
+## 6. Privacy & Ethics
 
-- MITRE ATT&CK Threat Patterns  
-- MISP Threat Feeds  
-- Leaked credentials from HaveIBeenPwned (API)  
-- Public dark web data (extracted through Crawl4AI)  
-- Historic breach data (Kaggle + open threat databases)
-
----
-
-## 8. 🔄 User Stories
-
-| Role | Action | Outcome |
-|------|--------|---------|
-| Analyst | Receives alert on new exploit found in dark web | Patches systems before threat goes live |
-| Security Lead | Views dashboard with regional threats | Adjusts firewall rules |
-| DevOps | Gets Slack ping for leaked credential | Resets keys and enforces MFA |
-| Researcher | Analyzes trends in threat heatmap | Prepares cyber-risk whitepaper |
+- No active exploitation or offensive tooling
+- Crawling is limited to publicly accessible or ethical research domains
+- No personal data stored without explicit user permission
+- All network sniffing runs locally and does not upload packet data
 
 ---
 
-## 9. ✅ Success Metrics
+## 7. Future Additions (Post-MVP)
 
-- 🟢 90%+ precision on threat classification (after tuning).  
-- ⏱️ < 30 seconds average alert latency.  
-- 📉 Reduction in unpredicted attacks for simulated orgs.  
-- 🧠 Trained model correctly forecasts attack waves at least 3–5 days ahead.
-
----
-
-## 10. 📈 Stretch Goals
-
-- Add browser extension to alert users while they browse vulnerable platforms.  
-- Feed outputs into open CTI platforms like MISP.  
-- Include a plug-in for SIEMs (like Splunk/ELK integration).  
-- Anomaly detection on network traffic logs to correlate with dark web chatter.
+- YARA-based malware detection
+- STIX/TAXII integration
+- Mobile dashboard app
+- Automated mitigation playbooks (SOAR-lite)
+- AI chatbot threat assistant
 
 ---
 
-Would you like this turned into a GitHub-style README or an actual dev sprint breakdown next? Or want me to prepare a working prototype architecture sketch?
+## 8. Summary
+
+SEER bridges the gap between threat detection and threat forecasting by combining real-time intelligence gathering from the web and local environments. It is safe, modular, educational, and provides hands-on experience with the future of cybersecurity.
+

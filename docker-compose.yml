@@ -1,0 +1,74 @@
+# docker-compose.yml
+version: '3.9'
+
+services:
+  redis:
+    image: redis:latest
+    container_name: seer-redis
+    hostname: redis
+    ports:
+      - "6379:6379" # Map host port to container port
+    volumes:
+      - seer-redis-data:/data # Mount named volume for persistence
+    command: redis-server --appendonly yes # Enable AOF persistence
+    healthcheck:
+        test: ["CMD", "redis-cli", "ping"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+
+  api:
+    container_name: seer-api
+    image: python:3.9-slim-bullseye # Use a base Python image
+    working_dir: /app
+    # Command to install API-specific requirements and run the FastAPI app with Uvicorn
+    # Assumes your entrypoint is seer/api/main.py and the app object is named 'app'
+    command: /bin/sh -c "pip install --no-cache-dir -r requirements_api.txt && uvicorn seer.api.main:app --host 0.0.0.0 --port 8000 --reload"
+    volumes:
+      - .:/app # Mount the entire project directory into /app for code and requirements_api.txt
+      # Explicitly map crawled_data to the path the API calculates for results
+      # This ensures consistency with the worker and the API's path resolution
+      - ./crawled_data:/app/seer/crawled_data
+    ports:
+      - "8000:8000" # Map host port 8000 to container port 8000
+    environment:
+      # Ensure API uses the correct Redis service name
+      - REDIS_URL=redis://redis:6379/0
+      # Add any other environment variables your API needs
+      # - OPENAI_API_KEY=your_key
+    depends_on:
+      redis:
+        condition: service_healthy # Wait for Redis to be healthy
+
+  worker:
+    container_name: seer-rq-worker
+    build:
+      context: . # Build from the current directory
+      dockerfile: Dockerfile # Use the Dockerfile we created
+    # The CMD is already defined in the Dockerfile, so we don't need to override it here.
+    # It expects RQ_REDIS_URL=redis://redis:6379/0 which is set in the Dockerfile ENV.
+    # It also expects TOR_SOCKS_HOST/PORT from Dockerfile ENV for scrapers.py
+    environment:
+      - RQ_REDIS_URL=redis://redis:6379/0 # Can be sourced from .env or set here if not in Dockerfile ENV
+      - TOR_SOCKS_HOST=127.0.0.1 # Can be sourced from .env or set here if not in Dockerfile ENV
+      - TOR_SOCKS_PORT=9050    # Can be sourced from .env or set here if not in Dockerfile ENV
+      - OPENAI_API_KEY=${OPENAI_API_KEY}  # Substituted from .env file or shell environment
+      - SUPABASE_URL=${SUPABASE_URL}        # Substituted from .env file or shell environment
+      - SUPABASE_KEY=${SUPABASE_KEY}        # Substituted from .env file or shell environment
+      # Add LOG_LEVEL for worker if desired, e.g., LOG_LEVEL=INFO
+      # - LOG_LEVEL=INFO 
+    volumes:
+      # Mount code for potential live updates (though workers usually need restart)
+      - ./seer:/app/seer
+      # Mount the host directory to the directory where tasks.py saves files
+      # tasks.py saves to os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'crawled_data'))
+      # Inside the container __file__ is /app/seer/crawler/tasks.py, so target is /app/seer/crawled_data
+      - ./crawled_data:/app/seer/crawled_data
+    depends_on:
+      redis:
+        condition: service_healthy # Wait for Redis to be healthy
+    # Add restart policy if desired
+    # restart: unless-stopped
+
+volumes:
+  seer-redis-data: # Define the named volume

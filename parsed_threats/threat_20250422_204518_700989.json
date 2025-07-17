@@ -1,0 +1,62 @@
+{
+    "title": "Leaked Credentials from Internal System",
+    "description": "A credentials dump containing usernames and passwords was exfiltrated during a recent security incident. The initial access vector is suspected to be a phishing campaign targeting employees.",
+    "threat_type": "Data Breach",
+    "severity": "HIGH",
+    "confidence": 0.9,
+    "tactics": [
+        "Credential Access",
+        "Initial Access"
+    ],
+    "techniques": [
+        "T1078",
+        "T1566"
+    ],
+    "threat_actors": null,
+    "indicators": [
+        {
+            "type": "email",
+            "value": "admin@internal.corp",
+            "confidence": 0.9,
+            "description": null
+        },
+        {
+            "type": "email",
+            "value": "support@sample.org",
+            "confidence": 0.9,
+            "description": null
+        },
+        {
+            "type": "email",
+            "value": "j.doe@internal.corp",
+            "confidence": 0.9,
+            "description": null
+        }
+    ],
+    "affected_systems": [
+        {
+            "name": "Primary Authentication Server",
+            "type": "Server",
+            "version": null,
+            "impact": "Potential unauthorized access using leaked credentials"
+        },
+        {
+            "name": "Related Databases",
+            "type": "Database",
+            "version": null,
+            "impact": "Potential unauthorized access using leaked credentials"
+        }
+    ],
+    "mitigations": [
+        "Immediate password rotation",
+        "System audit for all internal.corp and sample.org users",
+        "Enable multi-factor authentication",
+        "Monitor network traffic for unusual activity",
+        "Check logs for access patterns related to leaked credentials"
+    ],
+    "references": [],
+    "source_url": "http://pastesite.local/paste=abc",
+    "discovery_date": null,
+    "created_at": "2025-04-22T20:45:18.699084",
+    "updated_at": "2025-04-22T20:45:18.699090"
+}

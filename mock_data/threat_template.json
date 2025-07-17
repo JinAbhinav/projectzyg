@@ -1,0 +1,25 @@
+{
+  "job_id": 1000,
+  "url": "https://example.com/security-article",
+  "status": "completed",
+  "results": [
+    {
+      "id": 1,
+      "url": "https://example.com/security-article",
+      "title": "Title of Security Incident or Vulnerability",
+      "content": "Detailed description of the security incident or vulnerability. Include information about attack vectors, impact, affected systems, and any technical details that would be relevant for threat intelligence extraction. Provide enough context for the parser to identify key security elements such as CVEs, attack techniques, and indicators of compromise.",
+      "content_type": "text/plain",
+      "metadata": {
+        "timestamp": "2023-01-01T00:00:00Z",
+        "source_type": "security_blog",
+        "extracted_iocs": {
+          "cves": ["CVE-YYYY-NNNNN"],
+          "protocols": ["Protocol1", "Protocol2"],
+          "attack_patterns": ["Pattern1", "Pattern2"],
+          "malware_families": ["MalwareFamily1", "MalwareFamily2"],
+          "affected_software": ["Software1", "Software2"]
+        }
+      }
+    }
+  ]
+} 

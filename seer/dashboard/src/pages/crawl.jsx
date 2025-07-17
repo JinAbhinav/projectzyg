@@ -19,14 +19,17 @@ import axios from 'axios';
 const API_BASE_URL = 'http://localhost:8000/api';
 
 // Real API functions to interact with our backend
-const startCrawlJob = async (url, keywords, maxDepth, maxPages) => {
+const startCrawlJob = async (url, userJobId, scraperType) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/v1/crawl`, {
+    const payload = {
       url,
-      keywords,
-      max_depth: maxDepth,
-      max_pages: maxPages
-    });
+      source_type: "frontend_single_url",
+      scraper_type: scraperType,
+    };
+    if (userJobId) {
+      payload.job_id = userJobId;
+    }
+    const response = await axios.post(`${API_BASE_URL}/v1/crawl`, payload);
     
     return response.data;
   } catch (error) {
@@ -78,6 +81,7 @@ export default function CrawlPage() {
   const [maxDepth, setMaxDepth] = useState(2);
   const [maxPages, setMaxPages] = useState(10);
   const [crawlDarkWeb, setCrawlDarkWeb] = useState(false);
+  const [scraperType, setScraperType] = useState("request");
   
   // State for multiple URL crawler
   const [multipleUrls, setMultipleUrls] = useState("");
@@ -138,23 +142,19 @@ export default function CrawlPage() {
     setIsLoading(true);
     setResults([]);
     setSelectedResult(null);
+    setJobStatus(null);
+    setCurrentJobId(null);
     
     try {
-      // Parse keywords from comma-separated string
-      const keywordsList = keywords.split(",")
-        .map(k => k.trim())
-        .filter(k => k.length > 0);
-      
       const response = await startCrawlJob(
         url,
-        keywordsList.length > 0 ? keywordsList : null,
-        maxDepth,
-        maxPages
+        null,
+        scraperType
       );
       
       setCurrentJobId(response.job_id);
       setJobStatus(response.status);
-      toast.info(`Started crawl job #${response.job_id}`);
+      toast.info(`Crawl job ${response.job_id} initiated with status: ${response.status}`);
     } catch (error) {
       console.error("Error starting crawl job:", error);
       toast.error(`Failed to start crawl job: ${error.message}`);
@@ -273,52 +273,33 @@ export default function CrawlPage() {
                       </div>
                       
                       <div className="space-y-2">
-                        <Label htmlFor="keywords">Keywords (optional, comma-separated)</Label>
-                        <Input
-                          id="keywords"
-                          placeholder="exploit, vulnerability, hack"
-                          value={keywords}
-                          onChange={(e) => setKeywords(e.target.value)}
-                        />
-                        <p className="text-xs text-muted-foreground">
-                          Pages containing these keywords will be prioritized
-                        </p>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <Label htmlFor="maxDepth">Max Crawl Depth: {maxDepth}</Label>
-                          <span className="text-xs text-muted-foreground">(1-5)</span>
+                        <Label>Scraper Type</Label>
+                        <div className="flex items-center space-x-4">
+                          <div className="flex items-center space-x-2">
+                            <input 
+                              type="radio" 
+                              id="scraperTypeRequest"
+                              name="scraperType"
+                              value="request"
+                              checked={scraperType === "request"}
+                              onChange={() => setScraperType("request")}
+                              className="form-radio h-4 w-4 text-primary transition duration-150 ease-in-out"
+                            />
+                            <Label htmlFor="scraperTypeRequest">Fast Text Extraction</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <input 
+                              type="radio" 
+                              id="scraperTypeBrowser"
+                              name="scraperType"
+                              value="browser"
+                              checked={scraperType === "browser"}
+                              onChange={() => setScraperType("browser")}
+                              className="form-radio h-4 w-4 text-primary transition duration-150 ease-in-out"
+                            />
+                            <Label htmlFor="scraperTypeBrowser">Full Browser Render</Label>
+                          </div>
                         </div>
-                        <Slider
-                          id="maxDepth"
-                          min={1}
-                          max={5}
-                          step={1}
-                          value={[maxDepth]}
-                          onValueChange={(value) => setMaxDepth(value[0])}
-                        />
-                        <p className="text-xs text-muted-foreground">
-                          Higher values will crawl more deeply into the site
-                        </p>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <Label htmlFor="maxPages">Max Pages: {maxPages}</Label>
-                          <span className="text-xs text-muted-foreground">(1-50)</span>
-                        </div>
-                        <Slider
-                          id="maxPages"
-                          min={1}
-                          max={50}
-                          step={1}
-                          value={[maxPages]}
-                          onValueChange={(value) => setMaxPages(value[0])}
-                        />
-                        <p className="text-xs text-muted-foreground">
-                          Limit the total number of pages crawled
-                        </p>
                       </div>
                       
                       <div className="flex items-center space-x-2">

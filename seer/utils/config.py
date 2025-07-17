@@ -56,6 +56,31 @@ class NLPSettings(BaseSettings):
     EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "text-embedding-ada-002")
 
 
+class SupabaseSettings(BaseSettings):
+    """Supabase configuration settings."""
+    URL: str = os.getenv("SUPABASE_URL", "")
+    KEY: str = os.getenv("SUPABASE_KEY", "")
+    PROJECT_ID: str = os.getenv("SUPABASE_PROJECT_ID", "cbtapdewiwdhajqtbuxk")  # Your project ID
+
+
+class LLMSettings(BaseSettings):
+    """LLM configuration settings."""
+    API_KEY: str = os.getenv("OPENAI_API_KEY", "")
+    MODEL: str = os.getenv("LLM_MODEL", "gpt-4o")
+    TEMPERATURE: float = float(os.getenv("LLM_TEMPERATURE", "0.3"))
+    MAX_TOKENS: int = int(os.getenv("LLM_MAX_TOKENS", "1000"))
+
+
+class AbuseIPDBSettings(BaseSettings):
+    """AbuseIPDB configuration settings."""
+    API_KEY: str = os.getenv("ABUSEIPDB_API_KEY", "")
+
+
+class ShodanSettings(BaseSettings):
+    """Shodan configuration settings."""
+    API_KEY: str = os.getenv("SHODAN_API_KEY", "")
+
+
 class Settings(BaseSettings):
     """Main application settings."""
     APP_NAME: str = "SEER"
@@ -65,6 +90,10 @@ class Settings(BaseSettings):
     api: APISettings = APISettings()
     crawler: CrawlerSettings = CrawlerSettings()
     nlp: NLPSettings = NLPSettings()
+    supabase: SupabaseSettings = SupabaseSettings()
+    llm: LLMSettings = LLMSettings()
+    abuseipdb: AbuseIPDBSettings = AbuseIPDBSettings()
+    shodan: ShodanSettings = ShodanSettings()
 
 
 # Create a global settings instance

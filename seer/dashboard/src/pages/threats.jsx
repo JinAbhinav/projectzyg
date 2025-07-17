@@ -2,99 +2,35 @@ import React, { useState, useEffect } from 'react';
 import { Layout } from '../components/layout/layout';
 import { Button } from '../components/ui/button';
 import { AlertTriangle, Search, Calendar, Zap, Target, Shield, ChevronRight, Loader2, BarChart } from 'lucide-react';
-import { truncate, getSeverityColor, getSeverityTextColor } from '../lib/utils';
-
-// Mock data for threats
-const mockThreats = [
-  {
-    id: 1,
-    category: 'Zero-day Exploit',
-    severity: 'CRITICAL',
-    confidence: 92.5,
-    potential_targets: ['Windows Server', 'Enterprise Networks'],
-    justification: 'The text explicitly mentions a zero-day vulnerability for Windows Server 2022 with remote code execution capabilities. This represents a critical threat as it has not been patched and affects enterprise server infrastructure.',
-    created_at: '2023-11-05T10:23:15Z',
-    crawl_result: {
-      id: 101,
-      url: 'https://darkforum.example.com/threads/new-zero-day',
-      title: 'New Zero-Day Exploit Discussion',
-    }
-  },
-  {
-    id: 2,
-    category: 'Ransomware',
-    severity: 'HIGH',
-    confidence: 88.0,
-    potential_targets: ['Finance', 'Healthcare', 'Education'],
-    justification: 'The content directly refers to ransomware-as-a-service with a focus on high-value sectors including finance, healthcare, and education. The organized nature and affiliate model indicates sophisticated actors.',
-    created_at: '2023-11-04T14:45:22Z',
-    crawl_result: {
-      id: 102,
-      url: 'https://darkforum.example.com/threads/ransomware-attack',
-      title: 'Upcoming Ransomware Campaign',
-    }
-  },
-  {
-    id: 3,
-    category: 'Data Breach',
-    severity: 'HIGH',
-    confidence: 95.0,
-    potential_targets: ['Tech Company', 'Employees', 'Customers'],
-    justification: 'The text indicates a major data breach of a Fortune 500 tech company, with sensitive employee and customer data exposed, including emails, passwords, and personal information.',
-    created_at: '2023-11-03T08:12:44Z',
-    crawl_result: {
-      id: 301,
-      url: 'https://leaksite.example.net/dumps/tech-company-breach',
-      title: 'Corporate Database Dump - Fortune 500 Company',
-    }
-  },
-  {
-    id: 4,
-    category: 'DDoS',
-    severity: 'MEDIUM',
-    confidence: 80.0,
-    potential_targets: ['Government Websites'],
-    justification: 'The content describes coordination of DDoS attacks specifically targeting government websites, suggesting hacktivist or politically motivated activity.',
-    created_at: '2023-11-02T19:34:55Z',
-    crawl_result: {
-      id: 401,
-      url: 'https://telegram.example.org/channel/cyberthreats',
-      title: 'DDoS Attack Coordination',
-    }
-  },
-  {
-    id: 5,
-    category: 'Credential Theft',
-    severity: 'HIGH',
-    confidence: 85.0,
-    potential_targets: ['Cloud Services', 'Development Teams'],
-    justification: 'The post offers stolen API keys and access tokens for major cloud platforms including AWS, Azure, and GCP. This indicates a serious security breach that could lead to unauthorized access to cloud resources.',
-    created_at: '2023-11-01T12:22:33Z',
-    crawl_result: {
-      id: 501,
-      url: 'https://pasteboard.example.io/paste123',
-      title: 'Stolen API Keys',
-    }
-  },
-];
+import { truncate, getSeverityColor } from '../lib/utils';
+import { getThreats } from '../lib/threat-service';
 
 export default function ThreatsPage() {
   const [threats, setThreats] = useState([]);
   const [selectedThreat, setSelectedThreat] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filterSeverity, setFilterSeverity] = useState('ALL');
+  const [isMounted, setIsMounted] = useState(false);
 
-  // In a real implementation, you would fetch data from the API here
   useEffect(() => {
-    setIsLoading(true);
-    
-    // Simulate API delay
-    const timer = setTimeout(() => {
-      setThreats(mockThreats);
-      setIsLoading(false);
-    }, 500);
-    
-    return () => clearTimeout(timer);
+    setIsMounted(true);
+
+    const loadThreats = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const fetchedThreats = await getThreats();
+        setThreats(fetchedThreats);
+      } catch (err) {
+        console.error("Failed to load threats:", err);
+        setError(err.message || 'Failed to load threats.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadThreats();
   }, []);
 
   const filteredThreats = filterSeverity === 'ALL' 
@@ -154,9 +90,9 @@ export default function ThreatsPage() {
                     >
                       <div className="flex justify-between items-start">
                         <div className="max-w-[70%]">
-                          <div className="font-medium">{threat.category}</div>
+                          <div className="font-medium">{threat.title || threat.category || 'Untitled Threat'}</div>
                           <div className="text-xs text-muted-foreground mt-1">
-                            {new Date(threat.created_at).toLocaleString()}
+                            {threat.created_at}
                           </div>
                         </div>
                         <div className={`px-2 py-1 rounded text-xs font-medium ${getSeverityColor(threat.severity)}`}>
@@ -189,7 +125,7 @@ export default function ThreatsPage() {
                   <div className="space-y-6">
                     <div className="flex flex-col sm:flex-row justify-between">
                       <div>
-                        <h2 className="text-2xl font-bold">{selectedThreat.category}</h2>
+                        <h2 className="text-2xl font-bold">{selectedThreat.title || selectedThreat.category}</h2>
                         <div className="flex items-center mt-2">
                           <div className={`px-2 py-1 rounded text-xs font-medium ${getSeverityColor(selectedThreat.severity)}`}>
                             {selectedThreat.severity}
@@ -214,7 +150,7 @@ export default function ThreatsPage() {
                           <h4 className="font-medium">Detected</h4>
                         </div>
                         <p className="text-sm">
-                          {new Date(selectedThreat.created_at).toLocaleString()}
+                          {selectedThreat.created_at}
                         </p>
                       </div>
                       <div className="rounded-md bg-muted p-4">
@@ -223,7 +159,7 @@ export default function ThreatsPage() {
                           <h4 className="font-medium">Source</h4>
                         </div>
                         <p className="text-sm truncate">
-                          {selectedThreat.crawl_result.url}
+                          {selectedThreat.source_url || 'N/A'}
                         </p>
                       </div>
                     </div>
@@ -231,10 +167,10 @@ export default function ThreatsPage() {
                     <div>
                       <h4 className="font-medium mb-2 flex items-center">
                         <Zap className="h-4 w-4 mr-2 text-yellow-500" />
-                        Analysis
+                        Description/Justification
                       </h4>
                       <p className="text-sm">
-                        {selectedThreat.justification}
+                        {selectedThreat.description || selectedThreat.justification || 'No details available.'}
                       </p>
                     </div>
 
@@ -245,7 +181,7 @@ export default function ThreatsPage() {
                           Potential Targets
                         </h4>
                         <div className="flex flex-wrap gap-2">
-                          {selectedThreat.potential_targets.map((target, idx) => (
+                          {selectedThreat.potential_targets?.map((target, idx) => (
                             <div key={idx} className="bg-muted px-3 py-1 rounded-full text-xs">
                               {target}
                             </div>

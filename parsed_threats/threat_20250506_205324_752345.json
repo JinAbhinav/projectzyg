@@ -1,0 +1,60 @@
+{
+    "title": "Ransomware Attacks on UK Retailers",
+    "description": "A series of ransomware attacks have been reported on UK retailers, including M&S, Co-op, and Harrods. The attacks are attributed to the threat actor group DragonForce, which is reportedly evolving its ransomware tactics by allowing affiliates to use any branding they want. Despite their leak site not coming online as expected, the group continues to breach more retailers.",
+    "threat_type": "Ransomware",
+    "severity": "HIGH",
+    "confidence": 0.8,
+    "tactics": [
+        "Initial Access",
+        "Impact"
+    ],
+    "techniques": [
+        "T1190 - Exploit Public-Facing Application",
+        "T1486 - Data Encrypted for Impact"
+    ],
+    "threat_actors": [
+        {
+            "name": "DragonForce",
+            "description": "A threat actor group involved in ransomware attacks against UK retailers.",
+            "aliases": [],
+            "origin_country": "Unknown",
+            "motivation": [
+                "Financial Gain"
+            ]
+        }
+    ],
+    "indicators": null,
+    "affected_systems": [
+        {
+            "name": "M&S Systems",
+            "type": "Retail IT Infrastructure",
+            "version": "Unknown",
+            "impact": "System shutdowns and potential data breaches."
+        },
+        {
+            "name": "Co-op Systems",
+            "type": "Retail IT Infrastructure",
+            "version": "Unknown",
+            "impact": "System shutdowns."
+        },
+        {
+            "name": "Harrods Systems",
+            "type": "Retail IT Infrastructure",
+            "version": "Unknown",
+            "impact": "Unauthorized access attempts."
+        }
+    ],
+    "mitigations": [
+        "Implement robust backup and recovery solutions.",
+        "Enhance network monitoring and intrusion detection systems.",
+        "Conduct regular security audits and vulnerability assessments.",
+        "Educate employees on phishing and social engineering tactics."
+    ],
+    "references": [
+        "https://www.reddit.com/r/threatintel/comments/1kdclms/uk_retailers_ransomware_attacks/"
+    ],
+    "source_url": "Custom input",
+    "discovery_date": null,
+    "created_at": "2025-05-06T20:53:24.745546",
+    "updated_at": "2025-05-06T20:53:24.745549"
+}

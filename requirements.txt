@@ -1,32 +1,22 @@
-# Core dependencies
-Flask==2.3.3
-fastapi==0.103.1
-uvicorn==0.23.2
-python-dotenv==1.0.0
+# Core API & Server
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+python-dotenv>=0.20.0 # Relaxed constraint, was pinned for TorBot
+pydantic>=2.0.0
 
-# Database
-sqlalchemy==2.0.20
-psycopg2-binary==2.9.7
-redis==4.6.0
+# NLP/LLM Tools
+openai>=1.0.0
+langchain>=0.1.0
+# unstructured>=0.10.0 # Remains commented out
+# lxml==5.1.0 # Remains commented out
 
-# Web Crawling
-scrapy==2.10.0
-selenium==4.11.2
-requests==2.31.0
+# Add requests library
+requests
 
-# NLP and ML
-langchain==0.0.267
-openai==0.27.8
-spacy==3.6.1
-transformers==4.33.1
-scikit-learn==1.3.0
-xgboost==1.7.6
-torch==2.0.1
-prophet==1.1.4
-nltk==3.8.1
-
-# Utilities
-python-dateutil==2.8.2
-pydantic==2.3.0
-python-jose==3.3.0
-passlib==1.7.4 
+# Crawler & Task Queue
+botasaurus==3.2.5 # Pin to a specific 3.x version, used by the worker
+rq>=1.15.0
+redis>=5.0.0
+beautifulsoup4 # Added for parsing in @request scraper
+supabase>=1.0.0 # For ThreatParser (adjust version as needed, e.g., specific 1.x or 2.x)
+pydantic-settings>=2.0.0 # For seer.utils.config used by ThreatParser

@@ -1,0 +1,50 @@
+{
+    "title": "Spring4Shell Vulnerability (CVE-2022-22965)",
+    "description": "A critical remote code execution vulnerability in the Spring Framework, known as 'Spring4Shell' (CVE-2022-22965), affects Spring Core on JDK 9+. It allows attackers to execute arbitrary code via specially crafted HTTP requests. Exploitation has been confirmed in the wild, with attackers deploying web shells, cryptocurrency miners, and establishing persistent backdoor access.",
+    "threat_type": "Vulnerability",
+    "severity": "CRITICAL",
+    "confidence": 1.0,
+    "tactics": [
+        "Execution",
+        "Persistence"
+    ],
+    "techniques": [
+        "T1059.001",
+        "T1505.003"
+    ],
+    "threat_actors": null,
+    "indicators": [
+        {
+            "type": "CVE",
+            "value": "CVE-2022-22965",
+            "confidence": 1.0,
+            "description": null
+        }
+    ],
+    "affected_systems": [
+        {
+            "name": "Spring Framework",
+            "type": "Software",
+            "version": "5.3.0-5.3.17, 5.2.0-5.2.19",
+            "impact": "Allows remote code execution via HTTP requests."
+        },
+        {
+            "name": "Apache Tomcat",
+            "type": "Software",
+            "version": "N/A",
+            "impact": "Potentially vulnerable when used with affected Spring Framework versions."
+        }
+    ],
+    "mitigations": [
+        "Upgrade to Spring Framework versions 5.3.18 or 5.2.20.",
+        "Apply a patch to DisallowedFields.",
+        "Consider deploying applications with Java 8 to reduce risk."
+    ],
+    "references": [
+        "https://securityalerts.example/spring4shell-vulnerability-alert"
+    ],
+    "source_url": "Custom input",
+    "discovery_date": null,
+    "created_at": "2025-05-06T19:56:00.958711",
+    "updated_at": "2025-05-06T19:56:00.958714"
+}

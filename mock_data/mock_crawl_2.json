@@ -1,0 +1,22 @@
+{
+  "job_id": 1002,
+  "url": "http://pastesite.local/paste=abc",
+  "status": "completed",
+  "results": [
+    {
+      "id": 1,
+      "url": "http://pastesite.local/paste=abc",
+      "title": "Credentials Dump",
+      "content": "Leaked creds:\nuser1:password123\nadmin@internal.corp:!P@ssw0rd!\nsupport@sample.org:pass",
+      "content_type": "text/plain",
+      "metadata": {
+        "timestamp": "2024-08-15T11:00:00Z",
+        "source_type": "pastebin",
+         "extracted_iocs": {
+          "emails": ["admin@internal.corp", "support@sample.org"],
+          "credentials": ["user1:password123", "admin@internal.corp:!P@ssw0rd!", "support@sample.org:pass"]
+        }
+      }
+    }
+  ]
+} 

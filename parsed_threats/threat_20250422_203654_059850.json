@@ -1,0 +1,74 @@
+{
+    "title": "Credential Leak from Internal System",
+    "description": "A credentials dump containing usernames and passwords was leaked from an internal system. The data appears to have been exfiltrated during a recent security incident, potentially affecting the primary authentication server and related databases.",
+    "threat_type": "Data Breach",
+    "severity": "HIGH",
+    "confidence": 0.9,
+    "tactics": [
+        "Credential Access",
+        "Initial Access"
+    ],
+    "techniques": [
+        "T1078 - Valid Accounts",
+        "T1566 - Phishing"
+    ],
+    "threat_actors": null,
+    "indicators": [
+        {
+            "type": "Credential",
+            "value": "user1:password123",
+            "confidence": 0.9,
+            "description": null
+        },
+        {
+            "type": "Credential",
+            "value": "admin@internal.corp:!P@ssw0rd!",
+            "confidence": 0.9,
+            "description": null
+        },
+        {
+            "type": "Credential",
+            "value": "support@sample.org:pass",
+            "confidence": 0.9,
+            "description": null
+        },
+        {
+            "type": "Credential",
+            "value": "j.doe@internal.corp:Summer2024$",
+            "confidence": 0.9,
+            "description": null
+        },
+        {
+            "type": "Credential",
+            "value": "finance_user:Acc0unt!ngRul3z",
+            "confidence": 0.9,
+            "description": null
+        }
+    ],
+    "affected_systems": [
+        {
+            "name": "Primary Authentication Server",
+            "type": "Server",
+            "version": null,
+            "impact": "Potential unauthorized access using leaked credentials"
+        },
+        {
+            "name": "Related Databases",
+            "type": "Database",
+            "version": null,
+            "impact": "Potential unauthorized data access"
+        }
+    ],
+    "mitigations": [
+        "Immediate password rotation for affected accounts",
+        "Conduct a system audit for internal.corp and sample.org users",
+        "Enable multi-factor authentication",
+        "Monitor network traffic for unusual activity",
+        "Check logs for access patterns related to leaked credentials"
+    ],
+    "references": [],
+    "source_url": "http://pastesite.local/paste=abc",
+    "discovery_date": null,
+    "created_at": "2025-04-22T20:36:54.056200",
+    "updated_at": "2025-04-22T20:36:54.056210"
+}

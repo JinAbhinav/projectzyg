@@ -1,0 +1,45 @@
+{
+    "title": "Exploitation of Log4Shell (CVE-2021-44228)",
+    "description": "A critical remote code execution (RCE) vulnerability, identified as CVE-2021-44228 (Log4Shell), was found in the Apache Log4j logging library. Attackers are actively exploiting this vulnerability in the wild. The exploit involves sending a specially crafted string which, when logged by a vulnerable application using Log4j, triggers a JNDI lookup. This allows attackers to load and execute arbitrary Java code from an attacker-controlled server. Observed impacts include deployment of ransomware, crypto miners, and Cobalt Strike beacons.",
+    "threat_type": "Vulnerability Exploitation",
+    "severity": "CRITICAL",
+    "confidence": 1.0,
+    "tactics": [
+        "Execution",
+        "Initial Access"
+    ],
+    "techniques": [
+        "T1203",
+        "T1190"
+    ],
+    "threat_actors": null,
+    "indicators": [
+        {
+            "type": "CVE",
+            "value": "CVE-2021-44228",
+            "confidence": 1.0,
+            "description": null
+        }
+    ],
+    "affected_systems": [
+        {
+            "name": "Apache Log4j",
+            "type": "Software",
+            "version": "2.0-beta9 to 2.14.1",
+            "impact": "Remote code execution, potential deployment of ransomware, crypto miners, and Cobalt Strike beacons"
+        }
+    ],
+    "mitigations": [
+        "Immediate patching to Log4j 2.15.0 or later",
+        "Disabling JNDI lookups",
+        "Removing the JndiLookup class from the classpath",
+        "Monitoring for outbound LDAP/RMI connections and suspicious Java processes"
+    ],
+    "references": [
+        "https://securityblog.example/log4shell-incident-report"
+    ],
+    "source_url": "Custom input",
+    "discovery_date": null,
+    "created_at": "2025-05-06T17:09:53.314274",
+    "updated_at": "2025-05-06T17:09:53.314281"
+}

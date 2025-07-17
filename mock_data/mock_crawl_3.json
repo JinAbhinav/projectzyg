@@ -1,0 +1,23 @@
+{
+  "job_id": 1003,
+  "url": "email://internal.corp/inbox/msg-789",
+  "status": "completed",
+  "results": [
+    {
+      "id": 1,
+      "url": "email://internal.corp/inbox/msg-789",
+      "title": "Urgent: Action Required - Account Security Update",
+      "content": "Subject: Urgent: Action Required - Account Security Update\n\nDear Employee,\n\nWe have detected unusual activity associated with your corporate account. To ensure the security of your account and company data, immediate verification is required.\n\nPlease click the link below to verify your identity and update your security settings:\n\n[Link Removed - Malicious URL: http://internal-corp-security-update.example.com/verify?token=ABC123XYZ]\n\nFailure to verify within 24 hours may result in temporary account suspension.\n\nThank you for your cooperation,\nInternal Corp IT Security Team\nsecurity@internal.corp.co <--- Note the suspicious domain '.co' instead of '.com'",
+      "content_type": "text/plain",
+      "metadata": {
+        "timestamp": "2024-08-16T09:15:00Z",
+        "source_type": "email",
+        "extracted_iocs": {
+          "urls": ["http://internal-corp-security-update.example.com/verify?token=ABC123XYZ"],
+          "emails": ["security@internal.corp.co"],
+          "domains": ["internal-corp-security-update.example.com"]
+        }
+      }
+    }
+  ]
+} 

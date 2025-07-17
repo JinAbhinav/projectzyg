@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Add experimental flag if needed for older Next.js versions, 
+  // but transpilePackages is stable now.
+  // experimental: {
+  //   esmExternals: 'loose', // or true, depending on version/needs
+  // },
   async rewrites() {
     return [
       {
@@ -9,6 +14,9 @@ const nextConfig = {
       },
     ]
   },
+  // Your other configurations...
+  // Example: If you had output: 'export' for static builds, keep it
+  // output: 'export', 
 }
 
 module.exports = nextConfig 

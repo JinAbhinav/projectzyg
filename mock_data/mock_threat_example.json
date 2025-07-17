@@ -1,0 +1,25 @@
+{
+  "job_id": 1006,
+  "url": "https://securityalerts.example/spring4shell-vulnerability-alert",
+  "status": "completed",
+  "results": [
+    {
+      "id": 1,
+      "url": "https://securityalerts.example/spring4shell-vulnerability-alert",
+      "title": "Critical Alert: Spring4Shell Vulnerability (CVE-2022-22965)",
+      "content": "Security researchers have identified a critical remote code execution vulnerability in the Spring Framework, dubbed 'Spring4Shell' (CVE-2022-22965). This vulnerability affects Spring Core on JDK 9+ and allows attackers to execute arbitrary code by sending specially crafted HTTP requests. The vulnerability exists in the way Spring handles ClassLoader access through data binding mechanisms. Exploitation has been confirmed in the wild, with attackers deploying web shells, cryptocurrency miners, and establishing persistent backdoor access. Organizations using the Spring Framework with Java 9 or later, particularly in conjunction with Tomcat, are vulnerable if they use Spring parameter binding with non-basic parameter types. Immediate mitigation requires upgrading to Spring Framework versions 5.3.18 or 5.2.20, or implementing workarounds such as applying a patch to DisallowedFields. Applications deployed with Java 8 are less likely to be exploited but remain potentially vulnerable if other specific conditions are met.",
+      "content_type": "text/plain",
+      "metadata": {
+        "timestamp": "2022-03-31T14:30:00Z",
+        "source_type": "security_advisory",
+        "extracted_iocs": {
+          "cves": ["CVE-2022-22965"],
+          "protocols": ["HTTP"],
+          "attack_patterns": ["Remote Code Execution", "Web Shell Upload", "Parameter Manipulation"],
+          "malware_families": ["Web Shell", "Crypto Miner"],
+          "affected_software": ["Spring Framework 5.3.0-5.3.17", "Spring Framework 5.2.0-5.2.19", "Apache Tomcat"]
+        }
+      }
+    }
+  ]
+} 
